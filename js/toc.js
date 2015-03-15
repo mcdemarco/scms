@@ -1,4 +1,4 @@
-// Table of Contents for my singularity-cms fork.
+// Table of Contents for scms.
 
 (function(){
 	// Move the navigation.
