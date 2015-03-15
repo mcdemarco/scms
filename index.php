@@ -5,6 +5,7 @@
 $content =  'content'; // 'content' is the folder containing your markdown files
 $site_name = 'scms'; // the site name appears in the menus, so shorter is better
 $bootswatch_theme = 'spacelab'; // choose any bootswatch theme
+$invert_nav = true; // invert the bootstrap navbar
 $file_format = '.md'; // this is the extension on your markdown files (with the period).
 $index = 'index'; // the default file to open in each directory
 $use_random = false; // open a random file if a default file isn't found (TODO)
@@ -83,13 +84,12 @@ foreach ($dir as $fileinfo) {
 <!DOCTYPE html>
 <html>
 <head>
-<title><?php echo ($url != '' ? $url : $site_name); ?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
-<link rel="stylesheet" href="/js/scms.css"/>
+  <title><?php echo ($url != '' ? $url : $site_name); ?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
 </head>
 <body>
-    <div class="navbar navbar-fixed-top" role="navigation">
+    <header class="navbar <?php if ($invert_nav) echo 'navbar-inverse'; ?>" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -106,13 +106,13 @@ foreach ($dir as $fileinfo) {
           </ul>
         </div>
       </div>
-    </div>
+    </header>
 
   <div class="container" id="content">
-    <div class="list-group pull-right" id="scms-toc" title="Table of Contents"></div>
-	  
+    <div class="container-fluid pull-right">
+      <div class="list-group" id="scms-toc" title="Table of Contents"></div>
+    </div>
     <xmp style="display:none;"><?php echo $content; ?></xmp>
-
   </div>
   <script src="<?php echo $bootstrap_location; ?>"></script>
   <script src="<?php echo $marked_location; ?>"></script>
