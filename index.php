@@ -86,7 +86,7 @@ foreach ($dir as $fileinfo) {
 <title><?php echo ($url != '' ? $url : $site_name); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
-<link rel="stylesheet" href="/js/main.css"/>
+<link rel="stylesheet" href="/js/scms.css"/>
 </head>
 <body>
     <div class="navbar navbar-fixed-top" role="navigation">
@@ -116,6 +116,6 @@ foreach ($dir as $fileinfo) {
   </div>
   <script src="<?php echo $bootstrap_location; ?>"></script>
   <script src="<?php echo $marked_location; ?>"></script>
-  <script src="/js/main.js"></script>
+  <script src="/js/scms.js"></script>
 </body>
 </html>
