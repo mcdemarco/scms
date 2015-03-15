@@ -4,7 +4,7 @@
 // If you change $content and want to access raw files, also change the folder name in .htaccess
 $content =  'content'; // 'content' is the folder containing your markdown files
 $site_name = 'scms'; // the site name appears in the menus, so shorter is better
-$bootswatch_theme = 'spacelab'; // choose any bootstrap theme included in strapdown.js
+$bootswatch_theme = 'spacelab'; // choose any bootswatch theme
 $file_format = '.md'; // this is the extension on your markdown files (with the period).
 $index = 'index'; // the default file to open in each directory
 $use_random = false; // open a random file if a default file isn't found (TODO)
@@ -12,7 +12,9 @@ $use_CDN = true; // change this to false to serve javascript files locally (for 
 
 /* Advanced configuration */
 $local_js_dir = '/js/lib/';
-$strapdown_location = ($use_CDN ? 'http://strapdownjs.com/v/0.2/strapdown.js' : $local_js_dir . '/strapdown.js');
+$marked_location = ($use_CDN ? '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.js' :  $local_js_dir . 'marked.js');
+$bootstrap_location = $local_js_dir . 'bootstrap-without-jquery.js'; // v.0.6.1, Bootstrap 3.
+$bootswatch_location = 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/' . $bootswatch_theme . '/bootstrap.min.css';
 
 /* Innards */
 
@@ -66,11 +68,7 @@ EOF;
 
 // Generate the menus.
 $dir = new DirectoryIterator($content_dir . $path);
-$menu = <<< EOF
-<div id="scms-siteNavToolbar" aria-label="grouping">
-  <ul class="nav navbar-nav" role="group" aria-label="home">
-    <li><a href="/">home</a></li>
-EOF;
+$menu = ($path != '' ? '<li><a href="../">up</a></li>' : '');
 
 foreach ($dir as $fileinfo) {
   if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
@@ -80,21 +78,44 @@ foreach ($dir as $fileinfo) {
   }
 }
 
-$menu .= ($path != '' ? '<li><a href="../">up</a></li>' : '') . '</ul></div>';
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title><?php echo ($url != '' ? $url : $site_name); ?></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
+<link rel="stylesheet" href="/js/main.css"/>
 </head>
+<body>
+    <div class="navbar navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><?php echo $site_name; ?></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <?php echo $menu; ?>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-<xmp theme="<?php echo $bootswatch_theme; ?>" style="display:none;">
-
-<?php echo $menu; ?>
-
+    <div class="panel panel-default pull-right" id="scms-toc"></div>
+	  
+<xmp style="display:none;">
 <?php echo $content; ?>
 </xmp>
-<script src="<?php echo $strapdown_location; ?>"></script>
-<script src="/js/toc.js"></script>
+
+<script src="<?php echo $bootstrap_location; ?>"></script>
+<script src="<?php echo $marked_location; ?>"></script>
+<script src="/js/main.js"></script>
+</body>
 </html>
