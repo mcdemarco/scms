@@ -108,14 +108,14 @@ foreach ($dir as $fileinfo) {
       </div>
     </div>
 
-    <div class="panel panel-default pull-right" id="scms-toc"></div>
+  <div class="container" id="content">
+    <div class="list-group pull-right" id="scms-toc" title="Table of Contents"></div>
 	  
-<xmp style="display:none;">
-<?php echo $content; ?>
-</xmp>
+    <xmp style="display:none;"><?php echo $content; ?></xmp>
 
-<script src="<?php echo $bootstrap_location; ?>"></script>
-<script src="<?php echo $marked_location; ?>"></script>
-<script src="/js/main.js"></script>
+  </div>
+  <script src="<?php echo $bootstrap_location; ?>"></script>
+  <script src="<?php echo $marked_location; ?>"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>
