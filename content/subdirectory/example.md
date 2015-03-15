@@ -1,4 +1,4 @@
-# SCMS
+# SCMS Directory Browsing
 
-You have reached the subdirectory!
+You have reached a file in a subdirectory.
 
