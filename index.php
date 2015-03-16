@@ -32,18 +32,24 @@ if ($request_url != $script_url)
   $url = trim(preg_replace('/'. str_replace('/', '\/', str_replace('index.php', '', $script_url)) .'/', '', $request_url, 1), '/');
 
 // Get the file path
-if ($url) $file = $content_dir . $url;
-else $file = $content_dir . $index;
+if ($url) {
+  $file = $content_dir . $url; 
+  $file_name = (strrchr($url, '/') ? strrchr($url, '/') : $url);
+ } else {
+  $file = $content_dir . $index;
+  $file_name = $index;
+ }
 
-$is404 = false;
 // Load the file
 if (is_dir($file)) {
   $path = $url;
   $file = $content_dir . $url .'/' . $index . $file_format;
   if (file_exists($file)) {
+    $file_name = $index;
     $content = file_get_contents($file);
   } else {
     //To do: pick a file from the directory based on $use_random.
+    $file_name = '';
     $content = <<< EOF
 # Directory Listing
 
@@ -59,6 +65,7 @@ EOF;
     $content = file_get_contents($file);
   } else {
     $path = '';
+    $file_name = '404';
     $content = <<< EOF
 # 404
 
@@ -111,6 +118,9 @@ for ($i = 0; $i < count($pathsplit); $i++) {
     }
   }
 }
+
+if ($file_name != '')
+  $menu .= "<li><a class='scms-marker'>&gt;</a></li><li><a href='#'>$file_name</a></li>";
 
 
 ?>
