@@ -35,6 +35,7 @@ if ($request_url != $script_url)
 if ($url) $file = $content_dir . $url;
 else $file = $content_dir . $index;
 
+$is404 = false;
 // Load the file
 if (is_dir($file)) {
   $path = $url;
@@ -57,6 +58,7 @@ EOF;
   if (file_exists($file)) {
     $content = file_get_contents($file);
   } else {
+    $path = '';
     $content = <<< EOF
 # 404
 
@@ -69,13 +71,44 @@ EOF;
 
 // Generate the menus.
 $dir = new DirectoryIterator($content_dir . $path);
-$menu = ($path != '' ? '<li><a href="../">up</a></li>' : '');
+$menu = '';
+$submenu = '';
 
 foreach ($dir as $fileinfo) {
   if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
     $displayName = explode($file_format, $fileinfo)[0];
-    $menu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
-    $menu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
+    $submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
+    $submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
+  }
+}
+
+$pathsplit = explode('/',$path);
+$currentpath = '/';
+
+for ($i = 0; $i < count($pathsplit); $i++) {
+  $currentpath .= $pathsplit[$i];
+  //Home link and > marker handling.
+  if ($i == 0){
+    if ($pathsplit[$i] == '') {
+      //Full home menu.
+      $menu .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">home <span class="caret"></span></a>';
+      $menu .= '<ul class="dropdown-menu" role="menu">' . $submenu . '</ul></li>';
+    } else {
+      //Dummy home link
+      $menu .= '<li><a href="/">home</a></li><li><a class="scms-marker">&gt;</a></li>';
+    }
+  } else {
+    $menu .= '<li><a class="scms-marker">&gt;</a></li>';
+  }
+  //Non-home menus.
+  if ($pathsplit[$i] != '') {
+    if ($i == count($pathsplit) - 1) {
+      //We can only index the tip.
+      $menu .= "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>$pathsplit[$i] <span class='caret'></span></a>";
+      $menu .= "<ul class='dropdown-menu' role='menu'>" . $submenu . '</ul></li>';
+    } else {
+      $menu .= "<li><a href='$currentpath/'>{$pathsplit[$i]}</a></li>";
+    }
   }
 }
 
@@ -87,6 +120,7 @@ foreach ($dir as $fileinfo) {
   <title><?php echo ($url != '' ? $url : $site_name); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
+  <link rel="stylesheet" href="/js/scms.css"/>
 </head>
 <body>
     <header class="navbar <?php if ($invert_nav) echo 'navbar-inverse'; ?>" role="navigation">
