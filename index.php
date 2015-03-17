@@ -3,7 +3,7 @@
 /* Basic configuration */
 // If you change $content and want to access raw files, also change the folder name in .htaccess
 $content =  'content'; // 'content' is the folder containing your markdown files
-$site_name = 'scms'; // the site name appears in the menus, so shorter is better
+$site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
 $bootswatch_theme = 'spacelab'; // choose any bootswatch theme
 $invert_nav = true; // invert the bootstrap navbar
 $file_format = '.md'; // this is the extension on your markdown files (with the period).
@@ -119,9 +119,10 @@ for ($i = 0; $i < count($pathsplit); $i++) {
   }
 }
 
-if ($file_name != '')
+if ($file_name != '') {
+  $file_name = str_replace('/','',$file_name);
   $menu .= "<li><a class='scms-marker'>&gt;</a></li><li><a href='#'>$file_name</a></li>";
-
+}
 
 ?>
 <!DOCTYPE html>
