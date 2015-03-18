@@ -9,7 +9,7 @@ $invert_nav = true; // invert the bootstrap navbar
 $file_format = '.md'; // this is the extension on your markdown files (with the period).
 $index = 'index'; // the default file to open in each directory
 $menu_style = 'breadcrumbs'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
-$use_random = false; // open a random file if a default file isn't found (TODO)
+$use_random = true; // open a random file (probably the first one) if the default file isn't found 
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
 /* Advanced configuration */
@@ -50,17 +50,30 @@ if (is_dir($file)) {
     $file_name = $index;
     $content = file_get_contents($file);
   } else {
-    //To do: pick a file from the directory based on $use_random.
     $file_name = '';
-    $content = <<< EOF
+    //Pick a file from the directory based on $use_random.
+    if ($use_random) {
+      $dir = new DirectoryIterator($content_dir . $path);
+      foreach ($dir as $fileinfo) {
+	if ($fileinfo->isFile() && '.' . $fileinfo->getExtension() == $file_format) {
+	  $file_name = explode($file_format, $fileinfo)[0];
+	  $file = $content_dir . $url . '/' . $fileinfo;
+	  $content = file_get_contents($file);
+	  break;
+	}
+      }
+    }
+    if ($file_name == '') {
+      $content = <<< EOF
 # Directory Listing
 
 No index page was found for the directory you requested.
 
 EOF;
-    if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
-      $content .= 'Use the menu links to navigate to another page.';
-  }
+	if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
+	  $content .= 'Use the menu links to navigate to another page.';
+      }
+    }
 } else {
   $path = substr($url, 0, strrpos($url, '/'));
   $file .=  $file_format;
@@ -87,7 +100,7 @@ if ($menu_style == 'none') {
  } else {
 
   // Generate the menus.
-  $dir = new DirectoryIterator($content_dir . $path);
+  if (!isset($dir)) $dir = new DirectoryIterator($content_dir . $path);
   $submenu = '';
 
   foreach ($dir as $fileinfo) {
