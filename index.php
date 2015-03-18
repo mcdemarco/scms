@@ -8,6 +8,7 @@ $bootswatch_theme = 'spacelab'; // choose any bootswatch theme
 $invert_nav = true; // invert the bootstrap navbar
 $file_format = '.md'; // this is the extension on your markdown files (with the period).
 $index = 'index'; // the default file to open in each directory
+$menu_style = 'breadcrumbs'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
 $use_random = false; // open a random file if a default file isn't found (TODO)
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
@@ -21,6 +22,7 @@ $bootswatch_location = 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/' . $bo
 
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
 $content_dir = $content . '/';
+if ($menu_style != 'breadcrumbs' && $menu_style != 'flat' && $menu_style != 'filename') $menu_style = 'none';
 
 // Get request url and script url
 $url = '';
@@ -55,8 +57,9 @@ if (is_dir($file)) {
 
 No index page was found for the directory you requested.
 
-Use the menu links to navigate to another page.
 EOF;
+    if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
+      $content .= 'Use the menu links to navigate to another page.';
   }
 } else {
   $path = substr($url, 0, strrpos($url, '/'));
@@ -71,58 +74,72 @@ EOF;
 
 The file you requested was not found.
 
-Use the menu links to navigate to another page.
 EOF;
+    if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
+      $content .= 'Use the menu links to navigate to another page.';
   }
 }
 
-// Generate the menus.
-$dir = new DirectoryIterator($content_dir . $path);
-$menu = '';
-$submenu = '';
+if ($menu_style == 'none') {
+  $menu = '';
+ } elseif ($menu_style == 'filename') {
+  $menu = "<li><a href='#'>$path$file_name</a></li>";
+ } else {
 
-foreach ($dir as $fileinfo) {
-  if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
-    $displayName = explode($file_format, $fileinfo)[0];
-    $submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
-    $submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
-  }
-}
+  // Generate the menus.
+  $dir = new DirectoryIterator($content_dir . $path);
+  $submenu = '';
 
-$pathsplit = explode('/',$path);
-$currentpath = '/';
-
-for ($i = 0; $i < count($pathsplit); $i++) {
-  $currentpath .= $pathsplit[$i];
-  //Home link and > marker handling.
-  if ($i == 0){
-    if ($pathsplit[$i] == '') {
-      //Full home menu.
-      $menu .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">home <span class="caret"></span></a>';
-      $menu .= '<ul class="dropdown-menu" role="menu">' . $submenu . '</ul></li>';
-    } else {
-      //Dummy home link
-      $menu .= '<li><a href="/">home</a></li><li><a class="scms-marker">&gt;</a></li>';
+  foreach ($dir as $fileinfo) {
+    if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
+      $displayName = explode($file_format, $fileinfo)[0];
+      $submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
+      $submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
     }
+  }
+
+  if ($menu_style == 'flat') {
+    $menu = $submenu . ($path == '' ? '' : "<li><a href='/$path/../'>up</a></li>");
   } else {
-    $menu .= '<li><a class="scms-marker">&gt;</a></li>';
-  }
-  //Non-home menus.
-  if ($pathsplit[$i] != '') {
-    if ($i == count($pathsplit) - 1) {
-      //We can only index the tip.
-      $menu .= "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>$pathsplit[$i] <span class='caret'></span></a>";
-      $menu .= "<ul class='dropdown-menu' role='menu'>" . $submenu . '</ul></li>';
-    } else {
-      $menu .= "<li><a href='$currentpath/'>{$pathsplit[$i]}</a></li>";
+    $menu = '';
+
+    $pathsplit = explode('/',$path);
+    $currentpath = '/';
+
+    for ($i = 0; $i < count($pathsplit); $i++) {
+      $currentpath .= $pathsplit[$i];
+      //Home link and > marker handling.
+      if ($i == 0){
+	if ($pathsplit[$i] == '') {
+	  //Full home menu.
+	  $menu .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">home <span class="caret"></span></a>';
+	  $menu .= '<ul class="dropdown-menu" role="menu">' . $submenu . '</ul></li>';
+	} else {
+	  //Dummy home link
+	  $menu .= '<li><a href="/">home</a></li><li><a class="scms-marker">&gt;</a></li>';
+	}
+      } else {
+	$menu .= '<li><a class="scms-marker">&gt;</a></li>';
+      }
+      //Non-home menus.
+      if ($pathsplit[$i] != '') {
+	if ($i == count($pathsplit) - 1) {
+	  //We can only index the tip.
+	  $menu .= "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>$pathsplit[$i] <span class='caret'></span></a>";
+	  $menu .= "<ul class='dropdown-menu' role='menu'>" . $submenu . '</ul></li>';
+	} else {
+	  $menu .= "<li><a href='$currentpath/'>{$pathsplit[$i]}</a></li>";
+	}
+      }
+    }
+    
+    if ($file_name != '') {
+      $file_name = str_replace('/','',$file_name);
+      $menu .= "<li><a class='scms-marker'>&gt;</a></li><li><a href='#'>$file_name</a></li>";
     }
   }
-}
+ }
 
-if ($file_name != '') {
-  $file_name = str_replace('/','',$file_name);
-  $menu .= "<li><a class='scms-marker'>&gt;</a></li><li><a href='#'>$file_name</a></li>";
-}
 
 ?>
 <!DOCTYPE html>
