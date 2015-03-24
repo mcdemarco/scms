@@ -1,27 +1,29 @@
 <?php
 
-/* Basic configuration */
-// If you change $content and want to access raw files, also change the folder name in .htaccess
-$content =  'content'; // 'content' is the folder containing your markdown files
-$site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
-$bootswatch_theme = 'spacelab'; // choose any bootswatch theme
-$invert_nav = true; // invert the bootstrap navbar
+/* User configuration */
+// If you change $content_dir and want to access raw files, also change the folder name in .htaccess
+$content_dir =  'content'; // 'content' is the folder containing your markdown files
 $file_format = '.md'; // this is the extension on your markdown files (with the period).
-$index = 'index'; // the default file to open in each directory
-$menu_style = 'breadcrumbs'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
-$use_random = true; // open a random file (probably the first one) if the default file isn't found 
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
-/* Advanced configuration */
+$site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
+$bootswatch_theme = 'spacelab'; // choose any bootswatch theme; download it if not using CDN.
+$invert_nav = true; // invert the bootstrap navbar
+
+$index_filename = 'index'; // the default file to open in each directory
+$use_random = false; // open a random file (probably the first one) if the default file isn't found 
+$menu_style = 'breadcrumbs'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
+
+/* Internal configuration */
 $local_js_dir = '/js/lib/';
 $marked_location = ($use_CDN ? '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.js' :  $local_js_dir . 'marked.js');
 $bootstrap_location = $local_js_dir . 'bootstrap-without-jquery.js'; // v.0.6.1, Bootstrap 3.
-$bootswatch_location = 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/' . $bootswatch_theme . '/bootstrap.min.css';
+$bootswatch_location = ($use_CDN ? 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/'  :  $local_js_dir . 'bootswatch/') . $bootswatch_theme . '/bootstrap.min.css';
 
 /* Innards */
 
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
-$content_dir = $content . '/';
+$content_dir = $content_dir . '/';
 if ($menu_style != 'breadcrumbs' && $menu_style != 'flat' && $menu_style != 'filename') $menu_style = 'none';
 
 // Get request url and script url
@@ -38,16 +40,16 @@ if ($url) {
   $file = $content_dir . $url; 
   $file_name = (strrchr($url, '/') ? strrchr($url, '/') : $url);
  } else {
-  $file = $content_dir . $index;
-  $file_name = $index;
+  $file = $content_dir . $index_filename;
+  $file_name = $index_filename;
  }
 
 // Load the file
 if (is_dir($file)) {
   $path = $url;
-  $file = $content_dir . $url .'/' . $index . $file_format;
+  $file = $content_dir . $url .'/' . $index_filename . $file_format;
   if (file_exists($file)) {
-    $file_name = $index;
+    $file_name = $index_filename;
     $content = file_get_contents($file);
   } else {
     $file_name = '';
