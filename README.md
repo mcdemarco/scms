@@ -2,11 +2,19 @@
 
 SCMS is a simple, flat file CMS which serves Markdown files as HTML.  It uses a single PHP file plus a JavaScript file and an htaccess file to serve a directory tree of Markdown files.  SCMS has a configurable site menu, configurable theming using Bootswatch, automatic tables of contents for individual Markdown files (a la Wikipedia), pass-through of other file formats, and built-in 404 handling.
 
+## Use
+
 To run SCMS, you need the `.htaccess` file, `index.php`, the contents of the `js/` directory, and an Apache webserver with PHP and mod_rewrite set up.  [Here](http://ole.michelsen.dk/blog/setup-local-web-server-apache-php-osx-yosemite.html) are some simple instructions for setting them up on a Mac.
 
-## Customization Variables
+Once installed, you will be able to access files by name thus:  
+content/index.md can be accessed at /.  
+content/text.md can be accessed at /text.  
+content/subdirectory/index.md can be accessed at /subdirectory/.  
+A file at content/subdirectory/text.md can be accessed at /subdirectory/text.  
 
-The content directory, file type, Bootstrap theme, site name and other settings are customized by editing the PHP variables at the top of `index.php`.
+## Configuration
+
+The content directory, file type, Bootstrap theme, site name and other settings are customized by editing the PHP variables at the top of `index.php`.  The default values and other options are explained below.
 
 ### Setup
 
@@ -64,17 +72,11 @@ The 'breadcrumbs' option provides a breadcrumb trail from the top level of your 
 
 The 'flat' option flattens the current directory into separate menu items, plus an 'up' menu item to go up one directory level.  This option is the most likely to go wrong if your directory or subdirectories contain too many files to fit into the menu.
 
-## URLs
-
-A file at content/index.md can be accessed at /.  
-A file at content/text.md can be accessed at /text.  
-A file at content/sub/index.md can be accessed at /content/sub/.  
-A file at content/sub/text.md can be accessed at /sub/text.  
 
 ## Credits
 
 Copyright 2015 M.C.DeMarco, under the GNU Affero General Public License Version 3  
-Inspired by Singularity CMS Copyright (c) 2012-2014 Christopher J. Su (inspired by Pico and Stacey.)  
+Inspired by Singularity CMS Copyright (c) 2012-2014 Christopher J. Su (inspired by Pico and Stacey).  
 Uses [marked](https://github.com/chjj/marked/),
 [Bootstrap without jQuery](https://github.com/tagawa/bootstrap-without-jquery), and
 [Bootswatch](https://bootswatch.com).
