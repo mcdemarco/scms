@@ -162,11 +162,10 @@ if ($menu_style == 'none') {
 <head>
   <title><?php echo ($url != '' ? $url : $site_name); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
-  <link rel="stylesheet" href="/js/scms.css"/>
+  <link rel="stylesheet" href="/css/asciidoctor-default.css"/>
 </head>
 <body>
-    <header class="navbar <?php if ($invert_nav) echo 'navbar-inverse'; ?>" role="navigation">
+    <nav class="topbar <?php if ($invert_nav) echo 'navbar-inverse'; ?>" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -183,15 +182,15 @@ if ($menu_style == 'none') {
           </ul>
         </div>
       </div>
-    </header>
+    </nav>
 
-  <div class="container" id="content">
-    <div class="container-fluid pull-right">
-      <div class="list-group" id="scms-toc" title="Table of Contents"></div>
+  <main class="container" id="content">
+    <div id="toc" class="toc">
+      <div id="toctitle">Table of Contents</div>
+      <ul id="scms-toc" class="sectlevel1"></ul>
     </div>
     <xmp style="display:none;"><?php echo $content; ?></xmp>
-  </div>
-  <script src="<?php echo $bootstrap_location; ?>"></script>
+  </main>
   <script src="<?php echo $marked_location; ?>"></script>
   <script src="/js/scms.js"></script>
 </body>
