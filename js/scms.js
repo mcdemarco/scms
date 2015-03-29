@@ -42,6 +42,8 @@
 	// Append.
 	if (panelString) {
 		panel.innerHTML = panelString;
+	} else {
+		document.getElementById("toc").style.display = 'none';
 	}
 	
 })(window, document);
