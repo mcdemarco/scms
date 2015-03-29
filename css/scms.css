@@ -22,6 +22,7 @@
 
 .navigation {
     margin: auto;
+    max-width:62.5em;
     overflow: hidden;
     background-color: #000;
 }
@@ -44,7 +45,7 @@
 
 .navigation li a {
     display: block;
-    padding: 20px 20px;
+    padding: 10px;
     color: #fff;
     text-decoration: none;
 }
@@ -57,22 +58,18 @@
     float: left;
 }
 
-/*
-.navigation .logo a {
-    font-size: larger;
-    padding: 10px 20px;
-}
-*/
-
 .navigation .btn-link {
     float: right;
-    padding: 18px 30px;
+    padding: 10px;
 }
 
 .navigation .menu {
     clear: both;
 }
 
+#toc {
+    float:none;
+}
 
 /* 48em = 768px */
 
@@ -81,7 +78,7 @@
         float: left;
     }
     .navigation li a {
-        padding: 20px 30px;
+        padding: 10px;
     }
     .navigation .btn .menu {
         display: block;
@@ -89,49 +86,11 @@
     .navigation .btn-link {
         display: none;
     }
-}
 
-/* container */
-
-.container .row {
-    overflow: hidden;
-    margin: auto;
-    max-width: 1400px;
-}
-
-.container .row a {
-    position: relative;
-    float: left;
-    width: 100%;
-}
-
-.container .row a img {
-    width: 100%;
-    display: block;
-}
-
-.container .row a span {
-    color: #000;
-    position: absolute;
-    left: 5%;
-    bottom: 5%;
-    font-size: 2em;
-    text-shadow: 1px 1px 0 #fff;
-}
-
-.container .row-split a span {
-    display: none;
-}
-
-.container .row-split a:hover span {
-    display: block;
-}
-
-/* 48em = 768px */
-
-@media (min-width: 48em) {
-    .container .row-split a {
-        width: 50%;
+    #toc {
+	float:right;
+	margin-left:20px;
     }
 }
+
 
