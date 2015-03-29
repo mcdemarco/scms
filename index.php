@@ -19,6 +19,9 @@ $local_js_dir = '/js/lib/';
 $marked_location = ($use_CDN ? '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.js' :  $local_js_dir . 'marked.js');
 $bootstrap_location = $local_js_dir . 'bootstrap-without-jquery.js'; // v.0.6.1, Bootstrap 3.
 $bootswatch_location = ($use_CDN ? 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/'  :  $local_js_dir . 'bootswatch/') . $bootswatch_theme . '/bootstrap.min.css';
+//Ignore date errors.
+error_reporting(E_ALL ^ E_WARNING);
+
 
 /* Innards */
 
@@ -61,6 +64,7 @@ if (is_dir($file)) {
 	  $file_name = explode($file_format, $fileinfo)[0];
 	  $file = $content_dir . $url . '/' . $fileinfo;
 	  $content = file_get_contents($file);
+	  $timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
 	  break;
 	}
       }
@@ -75,12 +79,13 @@ EOF;
 	if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
 	  $content .= 'Use the menu links to navigate to another page.';
       }
-    }
+  }
 } else {
   $path = substr($url, 0, strrpos($url, '/'));
   $file .=  $file_format;
   if (file_exists($file)) {
     $content = file_get_contents($file);
+    $timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
   } else {
     $path = '';
     $file_name = '404';
@@ -167,7 +172,7 @@ if ($menu_style == 'none') {
 </head>
 <body>
 
-<header class="header" id="header">
+<header id="header">
   <div class="navigation">
     <ul class="nav">
       <li class="logo"><a href="/"><?php echo $site_name; ?></a></li>
@@ -187,6 +192,14 @@ if ($menu_style == 'none') {
     </div>
     <xmp style="display:none;"><?php echo $content; ?></xmp>
   </main>
+
+<?php if (isset($timestamp)) { ?>
+  <footer id="footer">
+    <div id="footer-text" class="text-right">
+       <?php echo $timestamp; ?>
+    </div>
+  </footer>
+<?php } ?>
 
   <script src="<?php echo $marked_location; ?>"></script>
   <script src="/js/scms.js"></script>
