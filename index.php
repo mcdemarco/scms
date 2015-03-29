@@ -12,7 +12,7 @@ $invert_nav = true; // invert the bootstrap navbar
 
 $index_filename = 'index'; // the default file to open in each directory
 $use_random = false; // open a random file (probably the first one) if the default file isn't found 
-$menu_style = 'breadcrumbs'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
+$menu_style = 'flat'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
 
 /* Internal configuration */
 $local_js_dir = '/js/lib/';
@@ -163,26 +163,22 @@ if ($menu_style == 'none') {
   <title><?php echo ($url != '' ? $url : $site_name); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="/css/asciidoctor-default.css"/>
+  <link rel="stylesheet" href="/css/scms.css"/>
 </head>
 <body>
-    <nav class="topbar <?php if ($invert_nav) echo 'navbar-inverse'; ?>" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/"><?php echo $site_name; ?></a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <?php echo $menu; ?>
-          </ul>
-        </div>
-      </div>
-    </nav>
+
+<header class="header" id="header">
+  <div class="navigation">
+    <ul class="nav">
+      <li class="logo"><a href="/"><?php echo $site_name; ?></a></li>
+      <li class="btn"><a href="#" class="btn-link">&#9776;</a>
+        <ul class="menu">
+          <?php echo $menu; ?>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</header>
 
   <main class="container" id="content">
     <div id="toc" class="toc">
@@ -191,6 +187,7 @@ if ($menu_style == 'none') {
     </div>
     <xmp style="display:none;"><?php echo $content; ?></xmp>
   </main>
+
   <script src="<?php echo $marked_location; ?>"></script>
   <script src="/js/scms.js"></script>
 </body>

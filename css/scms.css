@@ -1,4 +1,4 @@
-/* Some styles. */
+/* Some styles.
 
 .navbar li a.scms-marker {
   padding-left: 0;
@@ -17,5 +17,145 @@ img {
 
 .table {
   width: auto;
+}
+
+*/
+
+/* Navigation from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
+/*
+body {
+    margin: 0;
+    font-family: 'Droid Serif', serif;
+    background-color: #f4f4f4;
+}
+
+a {
+    color: #000;
+}
+*/
+/* header */
+
+.header {
+    padding: 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.navigation {
+    margin: auto;
+    max-width: 1000px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.navigation ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;;
+    background-color: #fff;
+}
+
+.navigation .btn .menu {
+    display: none;
+}
+
+.navigation .btn:hover .menu {
+    display: block;
+}
+
+.navigation li a {
+    display: block;
+    padding: 20px 20px;
+    border-right: 1px solid #f4f4f4;
+    text-decoration: none;
+}
+
+.navigation li a:hover {
+    background-color: #f4f4f4;
+}
+
+.navigation .logo {
+    float: left;
+}
+
+.navigation .logo a {
+    font-size: 2em;
+    padding: 10px 20px;
+}
+
+.navigation .btn-link {
+    float: right;
+    padding: 18px 30px;
+}
+
+.navigation .menu {
+    clear: both;
+}
+
+
+/* 48em = 768px */
+
+@media (min-width: 48em) {
+    .navigation li {
+        float: left;
+    }
+    .navigation li a {
+        padding: 20px 30px;
+    }
+    .navigation .btn .menu {
+        display: block;
+    }
+    .navigation .btn-link {
+        display: none;
+    }
+}
+
+/* container */
+
+.container .row {
+    overflow: hidden;
+    margin: auto;
+    max-width: 1400px;
+}
+
+.container .row a {
+    position: relative;
+    float: left;
+    width: 100%;
+}
+
+.container .row a img {
+    width: 100%;
+    display: block;
+}
+
+.container .row a span {
+    color: #fff;
+    position: absolute;
+    left: 5%;
+    bottom: 5%;
+    font-size: 2em;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.container .row-split a span {
+    display: none;
+}
+
+.container .row-split a:hover span {
+    display: block;
+}
+
+/* 48em = 768px */
+
+@media (min-width: 48em) {
+    .container .row-split a {
+        width: 50%;
+    }
 }
 
