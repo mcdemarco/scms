@@ -8,31 +8,31 @@
 */
 
 
+
 /* Navigation from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
 
 #header {
     width: 100%;
     max-width:100%!important;
     margin:0;
+    background-color:#f8f8f7;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: #000;
+    border-bottom:1px solid #e0e0dc;
 }
 
 .navigation {
     margin: auto;
     max-width:62.5em;
     overflow: hidden;
-    background-color: #000;
 }
 
 .navigation ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    overflow: hidden;;
-    background-color: #000;
+    overflow: hidden;
 }
 
 .navigation .btn .menu {
@@ -46,16 +46,20 @@
 .navigation li a {
     display: block;
     padding: 10px;
-    color: #fff;
     text-decoration: none;
 }
 
 .navigation li a:hover {
-    background-color: #4a4a4a;
+    background-color: #fbfbfb;
 }
 
 .navigation .logo {
     float: left;
+    border:none;
+}
+
+.navigation li {
+    border-top:1px solid #e0e0dc;
 }
 
 .navigation .btn-link {
@@ -76,6 +80,7 @@
 @media (min-width: 48em) {
     .navigation li {
         float: left;
+	border:none;
     }
     .navigation li a {
         padding: 10px;
@@ -93,4 +98,19 @@
     }
 }
 
+
+/* flex for short pages */
+
+body {
+    display: -webkit-flex;
+    display: flex;
+    min-height: 100vh;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+    -webkit-flex: 1 0 auto;
+}
 
