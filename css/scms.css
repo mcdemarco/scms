@@ -6,14 +6,6 @@ body {
     margin:0;
 }
 
-body, .markdown-body {
-    font-family: "Open Sans", "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
-}
-
-.markdown-body h1, .markdown-body h2 {
-    border: 0;
-}
-
 header, main, footer {
     margin-left:auto;
     margin-right:auto;
@@ -32,10 +24,11 @@ footer {
     color:rgba(255,255,255,.8);
     line-height:1.44;
     text-align:right;
+    margin-top:20px;
 }
 
 #toc {
-    border: 1px solid #e0e0dc;
+    border: 1px solid;
     border-radius: 5px;
     background-color: #f8f8f7;
 }
@@ -44,6 +37,10 @@ footer {
     padding-top: 14px;
     margin-bottom: -8px;
     text-align:center;
+}
+
+#toc a {
+    text-decoration:none;
 }
 
 /* Navigation adapted from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
@@ -88,7 +85,9 @@ header {
 }
 
 .navigation li a:hover {
-    background-color: #fbfbfb;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    opacity: 0.3; /*background-color: #fbfbfb;*/
 }
 
 .navigation .logo {
@@ -97,7 +96,7 @@ header {
 }
 
 .navigation li {
-    border-top:1px solid #e0e0dc;
+    border-top:1px solid;
 }
 
 .navigation .btn-link {
@@ -156,3 +155,78 @@ main {
     -webkit-flex: 1 0 auto;
 }
 
+/* undo some github style */
+
+body, .markdown-body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+}
+
+.markdown-body h1, .markdown-body h2 {
+    border: 0;
+}
+
+/* recolor: f9f8f8-73628a-a7c0de-313d5a-a0b2a6 */
+
+body {
+    color: #000;
+    background-color: #f9f8f8;
+}
+
+header, .navigation, .navigation li a {
+    color: #000;
+    background-color: #a0b2a6;
+}
+
+.navigation li a {
+    opacity: 0.45;
+}
+
+footer {
+    color: rgba(255,255,255,0.7);
+    background-color: #313D5A;
+}
+
+#toc, #toc a {
+    color: rgba(255,255,255,0.7);
+    background-color: #73628a;
+}
+
+.markdown-body hr,
+.markdown-body code,
+.markdown-body table tr,
+.markdown-body table tr:nth-child(2n),
+.markdown-body .highlight pre,
+.markdown-body pre,
+.markdown-body kbd,
+.markdown-body a:hover {
+    color: rgba(0,0,0,0.7);
+    background-color: #a7c0de;
+}
+
+.markdown-body a {
+    color: rgba(0,0,0,0.6);
+}
+
+.markdown-body h1 {
+    opacity: 0.3;
+}
+
+.markdown-body h2 {
+    opacity: 0.4;
+}
+
+.markdown-body h3, #toctitle {
+    opacity: 0.5;
+}
+
+.markdown-body h4 {
+    opacity: 0.6;
+}
+
+.markdown-body h5 {
+    opacity: 0.7;
+}
+
+.markdown-body h6 {
+    opacity: 0.8;
+}
