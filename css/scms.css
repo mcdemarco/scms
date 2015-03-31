@@ -1,17 +1,54 @@
-/* Some styles.
+/* Responsive style adapted from asciidoctor-default */
 
-.navbar li a.scms-marker {
-  padding-left: 0;
-  padding-right: 0;
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic";
+
+body {
+    margin:0;
 }
 
-*/
+body, .markdown-body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+}
 
+.markdown-body h1, .markdown-body h2 {
+    border: 0;
+}
 
+header, main, footer {
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:0;
+    margin-bottom:0;
+    max-width:62.5em;
+    position:relative;
+    padding-left:.9375em;
+    padding-right:.9375em
+}
 
-/* Navigation from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
+footer {
+    max-width:100%;
+    background-color:rgba(0,0,0,.8);
+    padding:1.25em;
+    color:rgba(255,255,255,.8);
+    line-height:1.44;
+    text-align:right;
+}
 
-#header {
+#toc {
+    border: 1px solid #e0e0dc;
+    border-radius: 5px;
+    background-color: #f8f8f7;
+}
+
+#toctitle {
+    padding-top: 14px;
+    margin-bottom: -8px;
+    text-align:center;
+}
+
+/* Navigation adapted from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
+
+header {
     width: 100%;
     max-width:100%!important;
     margin:0;
@@ -20,6 +57,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border-bottom:1px solid #e0e0dc;
+    margin-bottom:20px;
 }
 
 .navigation {
@@ -69,6 +107,10 @@
 
 .navigation .menu {
     clear: both;
+}
+
+main {
+    overflow:hidden;
 }
 
 #toc {
