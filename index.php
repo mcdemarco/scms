@@ -167,12 +167,12 @@ if ($menu_style == 'none') {
 <head>
   <title><?php echo ($url != '' ? $url : $site_name); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="/css/asciidoctor-default.css"/>
+  <link rel="stylesheet" href="/css/github-markdown.css"/> <!--asciidoctor-default.css/-->
   <link rel="stylesheet" href="/css/scms.css"/>
 </head>
 <body>
 
-<header id="header">
+<header>
   <div class="navigation">
     <ul class="nav">
       <li class="logo"><a href="/"><?php echo $site_name; ?></a></li>
@@ -185,17 +185,17 @@ if ($menu_style == 'none') {
   </div>
 </header>
 
-  <main class="container" id="content">
-    <div id="toc" class="toc">
-      <div id="toctitle">Table of Contents</div>
-      <ul id="scms-toc" class="sectlevel1"></ul>
+  <main id="content">
+    <div id="toc">
+      <div id="toctitle">Contents</div>
+      <ol id="scms-toc"></ol>
     </div>
     <xmp style="display:none;"><?php echo $content; ?></xmp>
   </main>
 
 <?php if (isset($timestamp)) { ?>
-  <footer id="footer">
-    <div id="footer-text" class="text-right">
+  <footer>
+    <div>
        <?php echo $timestamp; ?>
     </div>
   </footer>
