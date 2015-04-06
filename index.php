@@ -7,8 +7,7 @@ $file_format = '.md'; // this is the extension on your markdown files (with the 
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
 $site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
-$bootswatch_theme = 'spacelab'; // choose any bootswatch theme; download it if not using CDN.
-$invert_nav = true; // invert the bootstrap navbar
+$random_theme = false; // fetch a random color palette for styling
 
 $index_filename = 'index'; // the default file to open in each directory
 $use_random = false; // open a random file (probably the first one) if the default file isn't found 
@@ -19,22 +18,46 @@ $local_js_dir = '/js/lib/';
 $marked_location = ($use_CDN ? '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.js' :  $local_js_dir . 'marked.js');
 $bootstrap_location = $local_js_dir . 'bootstrap-without-jquery.js'; // v.0.6.1, Bootstrap 3.
 $bootswatch_location = ($use_CDN ? 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/'  :  $local_js_dir . 'bootswatch/') . $bootswatch_theme . '/bootstrap.min.css';
+
 //Ignore date errors.
 error_reporting(E_ALL ^ E_WARNING);
-
 
 /* Innards */
 
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
 $content_dir = $content_dir . '/';
 if ($menu_style != 'breadcrumbs' && $menu_style != 'flat' && $menu_style != 'filename') $menu_style = 'none';
+define('DEBUG', true);
+$default_colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871';//d7f9f1-7aa095-40531b-618b4a-afbc88';
 
-// Get request url and script url
+// Functions
+
+function dlog($phpSuxRox,$message = '') {
+  //debug logger
+   if (DEBUG)
+    {
+      echo '<span class="debug">'.$message.': '.$phpSuxRox.'</span><br/>';
+    }
+}
+
+function getContrastYIQ($hexcolor){
+	//Get the contrast color using the YIQ formula.
+	$r = intval(substr($hexcolor,0,2),16);
+	$g = intval(substr($hexcolor,2,2),16);
+	$b = intval(substr($hexcolor,4,2),16);
+	//dlog($hexcolor);
+	$yiq = (($r*299)+($g*587)+($b*114))/1000;
+	return ($yiq >= 128) ? '0,0,0' : '255,255,255';
+}
+
+/* Processing */
+// Get the request and script urls.
 $url = '';
-$request_url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
+$request_url = (isset($_SERVER['REQUEST_URI'])) ? strtok($_SERVER['REQUEST_URI'],'?') : '';
 $script_url  = (isset($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : '';
-	
-// Get our url path and trim the / of the left and the right
+$color_query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
+
+// Get the url path and trim the / of the left and the right
 if ($request_url != $script_url)
   $url = trim(preg_replace('/'. str_replace('/', '\/', str_replace('index.php', '', $script_url)) .'/', '', $request_url, 1), '/');
 
@@ -160,6 +183,57 @@ if ($menu_style == 'none') {
   }
  }
 
+if ($random_theme) {
+	$colorURL = "http://www.colourlovers.com/api/palettes?format=json&orderCol=numViews&sortBy=DESC";
+	$curl = curl_init();
+	curl_setopt($curl,CURLOPT_URL,$colorURL);
+	curl_setopt($curl,CURLOPT_HEADER,false);
+	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+	$raw = curl_exec($curl);
+	curl_close($curl);
+	$json = json_decode(utf8_encode($raw),true);
+	$theme = $json[array_rand($json)];
+} else {
+	$theme['colors'] = explode("-", $default_colors);
+	$theme['title'] = 'Coolors output';
+	$theme['url'] = 'http://app.coolors.co/'.$default_colors;
+}
+
+$theme['contrast'] = array_map('getContrastYIQ', $theme['colors']);
+//'f9f8f8-73628a-a7c0de-a0b2a6-313d5a';
+$style = <<<STYLE
+body {
+    color: rgb({$theme['contrast'][0]});
+    background-color: #{$theme['colors'][0]};}
+header, nav, nav li li, nav li a {
+    color: rgb({$theme['contrast'][3]});
+    background-color: #{$theme['colors'][3]};
+    border-color: rgba({$theme['contrast'][3]},0.3);}
+footer, footer a {
+    color: rgba({$theme['contrast'][4]},0.7);
+    background-color: #{$theme['colors'][4]};}
+#toc, #toc a {
+    color: rgba({$theme['contrast'][1]},0.7);
+    background-color: #{$theme['colors'][1]};}
+.markdown-body hr,
+.markdown-body code,
+.markdown-body table tr,
+.markdown-body table tr:nth-child(2n),
+.markdown-body .highlight pre,
+.markdown-body pre,
+.markdown-body kbd,
+.markdown-body a:hover {
+    color: rgba({$theme['contrast'][2]},0.7);
+    background-color: #{$theme['colors'][2]};}
+.markdown-body a {color: rgba({$theme['contrast'][0]},0.6);}
+
+@media (min-width: 48em) {
+    nav li li {
+	border:none;
+    }
+
+
+STYLE;
 
 ?>
 <!DOCTYPE html>
@@ -169,11 +243,14 @@ if ($menu_style == 'none') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="/css/github-markdown.css"/> <!--asciidoctor-default.css/-->
   <link rel="stylesheet" href="/css/scms.css"/>
+  <style>
+   <?php echo $style; ?>
+  </style>
 </head>
 <body>
 
 <header>
-  <div class="navigation">
+  <nav>
     <ul class="nav">
       <li class="logo"><a href="/"><?php echo $site_name; ?></a></li>
       <li class="btn"><a href="#" class="btn-link">&#9776;</a>
@@ -182,7 +259,7 @@ if ($menu_style == 'none') {
         </ul>
       </li>
     </ul>
-  </div>
+  </nav>
 </header>
 
   <main id="content">
@@ -192,11 +269,16 @@ if ($menu_style == 'none') {
     </div>
     <xmp style="display:none;"><?php echo $content; ?></xmp>
   </main>
-
-<?php if (isset($timestamp)) { ?>
+    
+  <?php if (isset($timestamp) || isset($theme)) { ?>
   <footer>
     <div>
-       <?php echo $timestamp; ?>
+       <?php
+       //echo var_dump($theme['colors']).'<br/>';						    
+       //echo var_dump($theme['contrast']);						    
+	  if (isset($theme)) echo '<span style="float:left;" title="' . implode('-',$theme['colors']) . '">Theme based on <a href="' . $theme['url']. '"> ' . $theme['title']. '</a></span>';
+          if (isset($timestamp)) echo $timestamp;
+	?>
     </div>
   </footer>
 <?php } ?>
