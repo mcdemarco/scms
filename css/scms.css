@@ -2,27 +2,34 @@
 
 @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic";
 
+/* layout */
+
 body {
     margin:0;
 }
 
 header, main, footer {
-    margin-left:auto;
-    margin-right:auto;
-    margin-top:0;
-    margin-bottom:0;
-    max-width:62.5em;
+    margin: 0 auto;
     position:relative;
+    max-width:100%;
     padding-left:.9375em;
-    padding-right:.9375em
+    padding-right:.9375em;
+}
+
+header nav, main, footer div, #toc {
+    margin:auto;
+    max-width:62.5em;
 }
 
 footer {
-    max-width:100%;
-    padding:1.25em;
     line-height:1.44;
-    text-align:center;
     margin-top:20px;
+    border-top: 1px solid;
+}
+
+footer div {
+    text-align:center;
+    padding:1.25em 0 1em 0;
 }
 
 footer .theme-title {
@@ -42,8 +49,8 @@ footer .last-modified {
 }
 
 #toctitle {
-    padding-top: 14px;
-    margin-bottom: -8px;
+    padding-top: 15px;
+    margin-bottom: -10px;
     text-align:center;
 }
 
@@ -54,9 +61,6 @@ footer .last-modified {
 /* Navigation adapted from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
 
 header {
-    width: 100%;
-    max-width:100%!important;
-    margin:0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -65,8 +69,6 @@ header {
 }
 
 nav {
-    margin: auto;
-    max-width:62.5em;
     overflow: hidden;
 }
 
@@ -121,7 +123,7 @@ main {
 
 #toc {
     float:none;
-    margin: 0 0 20px 0;
+    margin: 0 .9375em 20px .9375em;
 }
 
 /* 48em = 768px; these are the big screen settings */
@@ -145,7 +147,7 @@ main {
 
     #toc {
 	float:right;
-	margin: 0 0 0 20px;
+	margin: 0 auto 0 .9375em;
     }
 
     footer .theme-title {
@@ -206,6 +208,10 @@ footer, footer a {
     background-color: #313D5A;
 }
 
+footer {
+    border-color: rgba(255,255,255,0.1);
+}
+
 #toc, #toc a {
     color: rgba(255,255,255,0.7);
     background-color: #73628a;
@@ -238,11 +244,11 @@ footer, footer a {
     opacity: 0.4;
 }
 
-.markdown-body h2 {
+.markdown-body h2, #toctitle {
     opacity: 0.5;
 }
 
-.markdown-body h3, #toctitle {
+.markdown-body h3 {
     opacity: 0.6;
 }
 
