@@ -206,18 +206,18 @@ if ($random_theme) {
 $theme['contrast'] = array_map('getContrastYIQ', $theme['colors']);
 
 $style = <<<STYLE
-body, .markdown-body {
+body, .markdown-body, #circle0 {
     color: rgba({$theme['contrast'][0]},0.9);
     background-color: #{$theme['colors'][0]};}
 .markdown-body a {color: rgba({$theme['contrast'][0]},0.9);}
-header, nav, nav li li, nav li a {
+header, nav, nav li li, nav li a, #circle3 {
     color: rgb({$theme['contrast'][3]});
     background-color: #{$theme['colors'][3]};
     border-color: rgba({$theme['contrast'][3]},0.3);}
-footer, footer a {
+footer, footer a, #circle4 {
     color: rgba({$theme['contrast'][4]},0.7);
     background-color: #{$theme['colors'][4]};}
-#toc, #toc a {
+#toc, #toc a, #circle1 {
     color: rgba({$theme['contrast'][1]},0.7);
     background-color: #{$theme['colors'][1]};}
 .markdown-body hr,
@@ -227,7 +227,7 @@ footer, footer a {
 .markdown-body .highlight pre,
 .markdown-body pre,
 .markdown-body kbd,
-.markdown-body a:hover {
+.markdown-body a:hover, #circle2 {
     color: rgb({$theme['contrast'][2]});
     background-color: #{$theme['colors'][2]};}
 .markdown-body a:hover {color: rgba({$theme['contrast'][2]},0.7);}
@@ -236,10 +236,19 @@ footer, footer a {
     nav li li {
 	border:none;
     }
+
+.circle {border: 3px solid rgba({$theme['contrast'][4]},0.3);}
+
 STYLE;
 
 //Footer.
-$footer = (isset($theme) ? '<span style="float:left;" title="' . implode('-',$theme['colors']) . '">Theme based on <a href="' . $theme['url']. '">' . $theme['title'] . '</a></span>' : '') . (isset($timestamp) ? $timestamp : '');
+
+$circles = ' ';
+for ($n=0; $n<5; $n++) {
+	$circles .= "<span class='circle' id='circle$n' title='#{$theme['colors'][$n]}'></span> ";
+}
+
+$footer = (isset($theme) ? '<span style="float:left;">Theme based on <a href="' . $theme['url']. '">' . $theme['title'] . '</a></span>' : '') . ' ' . $circles . ' ' . (isset($timestamp) ? "<span style='float:right;'>$timestamp</span>" : '');
 
 ?>
 <!DOCTYPE html>
@@ -276,13 +285,11 @@ $footer = (isset($theme) ? '<span style="float:left;" title="' . implode('-',$th
 		<xmp style="display:none;"><?php echo $content; ?></xmp>
 	</main>
 	
-<?php if (isset($timestamp) || isset($theme)) { ?>
 	<footer>
 		<div>
 			<?php echo $footer; ?>
 		</div>
 	</footer>
-<?php } ?>
 
 	<script src="<?php echo $marked_location; ?>"></script>
 	<script src="/js/scms.js"></script>
