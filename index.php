@@ -33,20 +33,11 @@ $paletteCount = rand(20,70);
 
 // Functions
 
-function dlog($phpSuxRox,$message = '') {
-  //debug logger
-   if (DEBUG)
-    {
-      echo '<span class="debug">'.$message.': '.$phpSuxRox.'</span><br/>';
-    }
-}
-
 function getContrastYIQ($hexcolor){
 	//Get the contrast color using the YIQ formula.
 	$r = intval(substr($hexcolor,0,2),16);
 	$g = intval(substr($hexcolor,2,2),16);
 	$b = intval(substr($hexcolor,4,2),16);
-	//dlog($hexcolor);
 	$yiq = (($r*299)+($g*587)+($b*114))/1000;
 	return ($yiq >= 128) ? '0,0,0' : '255,255,255';
 }
@@ -72,130 +63,130 @@ $color_query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : ''
 
 // Get the url path and trim the / of the left and the right
 if ($request_url != $script_url)
-  $url = trim(preg_replace('/'. str_replace('/', '\/', str_replace('index.php', '', $script_url)) .'/', '', $request_url, 1), '/');
+	$url = trim(preg_replace('/'. str_replace('/', '\/', str_replace('index.php', '', $script_url)) .'/', '', $request_url, 1), '/');
 
 // Get the file path
 if ($url) {
-  $file = $content_dir . $url; 
-  $file_name = (strrchr($url, '/') ? strrchr($url, '/') : $url);
- } else {
-  $file = $content_dir . $index_filename;
-  $file_name = $index_filename;
- }
+	$file = $content_dir . $url; 
+	$file_name = (strrchr($url, '/') ? strrchr($url, '/') : $url);
+} else {
+	$file = $content_dir . $index_filename;
+	$file_name = $index_filename;
+}
 
 // Load the file
 if (is_dir($file)) {
-  $path = $url;
-  $file = $content_dir . $url .'/' . $index_filename . $file_format;
-  if (file_exists($file)) {
-    $file_name = $index_filename;
-    $content = file_get_contents($file);
-  } else {
-    $file_name = '';
-    //Pick a file from the directory based on $random_file.
-    if ($random_file) {
-      $dir = new DirectoryIterator($content_dir . $path);
-      foreach ($dir as $fileinfo) {
-	if ($fileinfo->isFile() && '.' . $fileinfo->getExtension() == $file_format) {
-	  $file_name = explode($file_format, $fileinfo)[0];
-	  $file = $content_dir . $url . '/' . $fileinfo;
-	  $content = file_get_contents($file);
-	  $timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
-	  break;
-	}
-      }
-    }
-    if ($file_name == '') {
-      $content = <<< EOF
+	$path = $url;
+	$file = $content_dir . $url .'/' . $index_filename . $file_format;
+	if (file_exists($file)) {
+		$file_name = $index_filename;
+		$content = file_get_contents($file);
+	} else {
+		$file_name = '';
+		//Pick a file from the directory based on $random_file.
+		if ($random_file) {
+			$dir = new DirectoryIterator($content_dir . $path);
+			foreach ($dir as $fileinfo) {
+				if ($fileinfo->isFile() && '.' . $fileinfo->getExtension() == $file_format) {
+					$file_name = explode($file_format, $fileinfo)[0];
+					$file = $content_dir . $url . '/' . $fileinfo;
+					$content = file_get_contents($file);
+					$timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
+					break;
+				}
+			}
+		}
+		if ($file_name == '') {
+			$content = <<< EOF
 # Directory Listing
 
 No index page was found for the directory you requested.
 
 EOF;
-	if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
-	  $content .= 'Use the menu links to navigate to another page.';
-      }
-  }
+			if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
+				$content .= 'Use the menu links to navigate to another page.';
+		}
+	}
 } else {
-  $path = substr($url, 0, strrpos($url, '/'));
-  $file .=  $file_format;
-  if (file_exists($file)) {
-    $content = file_get_contents($file);
-    $timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
-  } else {
-    $path = '';
-    $file_name = '404';
-    $content = <<< EOF
+	$path = substr($url, 0, strrpos($url, '/'));
+	$file .=  $file_format;
+	if (file_exists($file)) {
+		$content = file_get_contents($file);
+		$timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
+	} else {
+		$path = '';
+		$file_name = '404';
+		$content = <<< EOF
 # 404
 
 The file you requested was not found.
 
 EOF;
-    if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
-      $content .= 'Use the menu links to navigate to another page.';
-  }
+		if ($menu_style == 'flat' || $menu_style == 'breadcrumbs')
+			$content .= 'Use the menu links to navigate to another page.';
+	}
 }
 
 if ($menu_style == 'none') {
-  $menu = '';
- } elseif ($menu_style == 'filename') {
-  $menu = "<li><a href='#'>$path$file_name</a></li>";
- } else {
+	$menu = '';
+} elseif ($menu_style == 'filename') {
+	$menu = "<li><a href='#'>$path$file_name</a></li>";
+} else {
+	// Generate the menus.
+	if (!isset($dir)) $dir = new DirectoryIterator($content_dir . $path);
+	$submenu = '';
 
-  // Generate the menus.
-  if (!isset($dir)) $dir = new DirectoryIterator($content_dir . $path);
-  $submenu = '';
-
-  foreach ($dir as $fileinfo) {
-    if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
-      $displayName = explode($file_format, $fileinfo)[0];
-      $submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
-      $submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
-    }
-  }
-
-  if ($menu_style == 'flat') {
-    $menu = $submenu . ($path == '' ? '' : "<li><a href='/$path/../'>up</a></li>");
-  } else {
-    $menu = '';
-
-    $pathsplit = explode('/',$path);
-    $currentpath = '/';
-
-    for ($i = 0; $i < count($pathsplit); $i++) {
-      $currentpath .= $pathsplit[$i];
-      //Home link and > marker handling.
-      if ($i == 0){
-	if ($pathsplit[$i] == '') {
-	  //Full home menu.
-	  $menu .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">home <span class="caret"></span></a>';
-	  $menu .= '<ul class="dropdown-menu" role="menu">' . $submenu . '</ul></li>';
-	} else {
-	  //Dummy home link
-	  $menu .= '<li><a href="/">home</a></li><li><a class="scms-marker">&gt;</a></li>';
+	foreach ($dir as $fileinfo) {
+		if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
+			$displayName = explode($file_format, $fileinfo)[0];
+			$submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
+			$submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
+		}
 	}
-      } else {
-	$menu .= '<li><a class="scms-marker">&gt;</a></li>';
-      }
-      //Non-home menus.
-      if ($pathsplit[$i] != '') {
-	if ($i == count($pathsplit) - 1) {
-	  //We can only index the tip.
-	  $menu .= "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>$pathsplit[$i] <span class='caret'></span></a>";
-	  $menu .= "<ul class='dropdown-menu' role='menu'>" . $submenu . '</ul></li>';
+	
+	if ($menu_style == 'flat') {
+		$menu = $submenu . ($path == '' ? '' : "<li><a href='/$path/../'>up</a></li>");
 	} else {
-	  $menu .= "<li><a href='$currentpath/'>{$pathsplit[$i]}</a></li>";
-	}
-      }
-    }
+		$menu = '';
+		$pathsplit = explode('/',$path);
+		$currentpath = '/';
+
+		for ($i = 0; $i < count($pathsplit); $i++) {
+			$currentpath .= $pathsplit[$i];
+			//Home link and > marker handling.
+			if ($i == 0){
+				if ($pathsplit[$i] == '') {
+					//Full home menu.
+					$menu .= '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">home <span class="caret"></span></a>';
+					$menu .= '<ul class="dropdown-menu" role="menu">' . $submenu . '</ul></li>';
+				} else {
+					//Dummy home link
+					$menu .= '<li><a href="/">home</a></li><li><a class="scms-marker">&gt;</a></li>';
+				}
+			} else {
+				$menu .= '<li><a class="scms-marker">&gt;</a></li>';
+			}
+			//Non-home menus.
+			if ($pathsplit[$i] != '') {
+				if ($i == count($pathsplit) - 1) {
+					//We can only index the tip.
+					$menu .= "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>$pathsplit[$i] <span class='caret'></span></a>";
+					$menu .= "<ul class='dropdown-menu' role='menu'>" . $submenu . '</ul></li>';
+				} else {
+					$menu .= "<li><a href='$currentpath/'>{$pathsplit[$i]}</a></li>";
+				}
+			}
+		}
     
-    if ($file_name != '') {
-      $file_name = str_replace('/','',$file_name);
-      $menu .= "<li><a class='scms-marker'>&gt;</a></li><li><a href='#'>$file_name</a></li>";
-    }
-  }
- }
+		if ($file_name != '') {
+			$file_name = str_replace('/','',$file_name);
+			$menu .= "<li><a class='scms-marker'>&gt;</a></li><li><a href='#'>$file_name</a></li>";
+		}
+	}
+}
 
+
+//Theme.
 if ($random_theme) {
 	$colorURL = 'http://www.colourlovers.com/api/palettes/new?format=json&numResults=' . $paletteCount;
 	$curl = curl_init();
@@ -213,7 +204,7 @@ if ($random_theme) {
 }
 
 $theme['contrast'] = array_map('getContrastYIQ', $theme['colors']);
-//'f9f8f8-73628a-a7c0de-a0b2a6-313d5a';
+
 $style = <<<STYLE
 body, .markdown-body {
     color: rgba({$theme['contrast'][0]},0.9);
@@ -245,59 +236,55 @@ footer, footer a {
     nav li li {
 	border:none;
     }
-
-
 STYLE;
+
+//Footer.
+$footer = (isset($theme) ? '<span style="float:left;" title="' . implode('-',$theme['colors']) . '">Theme based on <a href="' . $theme['url']. '">' . $theme['title'] . '</a></span>' : '') . (isset($timestamp) ? $timestamp : '');
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title><?php echo ($url != '' ? $url : $site_name); ?></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="/css/github-markdown.css"/> <!--asciidoctor-default.css/-->
-  <link rel="stylesheet" href="/css/scms.css"/>
-  <style>
-   <?php echo $style; ?>
-  </style>
+	<title><?php echo ($url != '' ? $url : $site_name); ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="/css/github-markdown.css"/> <!--asciidoctor-default.css/-->
+	<link rel="stylesheet" href="/css/scms.css"/>
+	<style>
+	 <?php echo $style; ?>
+	</style>
 </head>
 <body>
 
-<header>
-  <nav>
-    <ul class="nav">
-      <li class="logo"><a href="/"><?php echo $site_name; ?></a></li>
-      <li class="btn"><a href="#" class="btn-link">&#9776;</a>
-        <ul class="menu">
-          <?php echo $menu; ?>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-</header>
+	<header>
+		<nav>
+			<ul class="nav">
+				<li class="logo"><a href="/"><?php echo $site_name; ?></a></li>
+				<li class="btn"><a href="#" class="btn-link">&#9776;</a>
+					<ul class="menu">
+						<?php echo $menu; ?>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+	</header>
 
-  <main id="content">
-    <div id="toc">
-      <div id="toctitle">Contents</div>
-      <ol id="scms-toc"></ol>
-    </div>
-    <xmp style="display:none;"><?php echo $content; ?></xmp>
-  </main>
-    
-  <?php if (isset($timestamp) || isset($theme)) { ?>
-  <footer>
-    <div>
-       <?php
-       //echo var_dump($theme['colors']).'<br/>';						    
-       //echo var_dump($theme['contrast']);						    
-	  if (isset($theme)) echo '<span style="float:left;" title="' . implode('-',$theme['colors']) . '">Theme based on <a href="' . $theme['url']. '"> ' . $theme['title']. '</a></span>';
-          if (isset($timestamp)) echo $timestamp;
-	?>
-    </div>
-  </footer>
+	<main id="content">
+		<div id="toc">
+			<div id="toctitle">Contents</div>
+			<ol id="scms-toc"></ol>
+		</div>
+		<xmp style="display:none;"><?php echo $content; ?></xmp>
+	</main>
+	
+<?php if (isset($timestamp) || isset($theme)) { ?>
+	<footer>
+		<div>
+			<?php echo $footer; ?>
+		</div>
+	</footer>
 <?php } ?>
 
-  <script src="<?php echo $marked_location; ?>"></script>
-  <script src="/js/scms.js"></script>
+	<script src="<?php echo $marked_location; ?>"></script>
+	<script src="/js/scms.js"></script>
 </body>
 </html>
