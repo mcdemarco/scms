@@ -43,10 +43,10 @@ function getContrastYIQ($hexcolor){
 }
 
 function getBestIndex($paletteArray) {
-	//Get the most liked of the palettes.
+	//Get the most liked of the (full) palettes.
 	$max = -1;
 	foreach ($paletteArray as $key => $value) {
-		if ( $value['numViews'] + (3 * $value['numVotes'] > $max) ) {
+		if ( $value['numViews'] + (3 * $value['numVotes'] > $max) && count($value['colors']) >= 5) {
 			$max = $value['numViews'] + (5 * $value['numVotes']);
 			$paletteKey = $key;
 		}
