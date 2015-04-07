@@ -198,12 +198,17 @@ footer, footer a {
 .markdown-body pre,
 .markdown-body kbd,
 .markdown-body a:hover {
-    color: rgba(0,0,0,0.7);
     background-color: #a7c0de;
 }
 
-.markdown-body a {
-    color: rgba(0,0,0,0.6);
+.markdown-body a,
+.markdown-body a:hover {
+    color: rgba(0,0,0,0.9);
+    font-weight: bold;
+}
+
+.markdown-body a:hover {
+    color: rgba(0,0,0,0.7);
 }
 
 /* hN header opacity */

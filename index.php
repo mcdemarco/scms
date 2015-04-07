@@ -223,9 +223,9 @@ footer, footer a {
 .markdown-body pre,
 .markdown-body kbd,
 .markdown-body a:hover {
-    color: rgba({$theme['contrast'][2]},0.7);
     background-color: #{$theme['colors'][2]};}
-.markdown-body a {color: rgba({$theme['contrast'][0]},0.6);}
+.markdown-body a {color: rgba({$theme['contrast'][0]},0.9);}
+.markdown-body a:hover {color: rgba({$theme['contrast'][2]},0.7);}
 
 @media (min-width: 48em) {
     nav li li {
