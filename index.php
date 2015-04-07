@@ -29,6 +29,7 @@ $content_dir = $content_dir . '/';
 if ($menu_style != 'breadcrumbs' && $menu_style != 'flat' && $menu_style != 'filename') $menu_style = 'none';
 define('DEBUG', true);
 $default_colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871';//d7f9f1-7aa095-40531b-618b4a-afbc88';
+$paletteCount = rand(20,70);
 
 // Functions
 
@@ -48,6 +49,18 @@ function getContrastYIQ($hexcolor){
 	//dlog($hexcolor);
 	$yiq = (($r*299)+($g*587)+($b*114))/1000;
 	return ($yiq >= 128) ? '0,0,0' : '255,255,255';
+}
+
+function getBestIndex($paletteArray) {
+	//Get the most liked of the palettes.
+	$max = -1;
+	foreach ($paletteArray as $key => $value) {
+		if ( $value['numViews'] + (3 * $value['numVotes'] > $max) ) {
+			$max = $value['numViews'] + (5 * $value['numVotes']);
+			$paletteKey = $key;
+		}
+	}
+	return $paletteKey;
 }
 
 /* Processing */
@@ -184,7 +197,7 @@ if ($menu_style == 'none') {
  }
 
 if ($random_theme) {
-	$colorURL = "http://www.colourlovers.com/api/palettes?format=json&orderCol=numViews&sortBy=DESC";
+	$colorURL = 'http://www.colourlovers.com/api/palettes/new?format=json&numResults=' . $paletteCount;
 	$curl = curl_init();
 	curl_setopt($curl,CURLOPT_URL,$colorURL);
 	curl_setopt($curl,CURLOPT_HEADER,false);
@@ -192,7 +205,7 @@ if ($random_theme) {
 	$raw = curl_exec($curl);
 	curl_close($curl);
 	$json = json_decode(utf8_encode($raw),true);
-	$theme = $json[array_rand($json)];
+	$theme = $json[getBestIndex($json)];
 } else {
 	$theme['colors'] = explode("-", $default_colors);
 	$theme['title'] = 'Coolors output';
