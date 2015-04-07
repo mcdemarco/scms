@@ -91,7 +91,7 @@ if (is_dir($file)) {
 					$file_name = explode($file_format, $fileinfo)[0];
 					$file = $content_dir . $url . '/' . $fileinfo;
 					$content = file_get_contents($file);
-					$timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
+					$timestamp = "File modified: " . date("F d Y H:i:s e.", filemtime($file));
 					break;
 				}
 			}
@@ -112,7 +112,7 @@ EOF;
 	$file .=  $file_format;
 	if (file_exists($file)) {
 		$content = file_get_contents($file);
-		$timestamp = "Last modified: " . date("F d Y H:i:s e.", filemtime($file));
+		$timestamp = "File modified: " . date("F d Y H:i:s e.", filemtime($file));
 	} else {
 		$path = '';
 		$file_name = '404';
@@ -237,7 +237,7 @@ footer, footer a, #circle4 {
 	border:none;
     }
 
-.circle {border: 3px solid rgba({$theme['contrast'][4]},0.3);}
+.circle, #circle3 {border: 2px solid rgba({$theme['contrast'][4]},0.3);}
 
 STYLE;
 
@@ -248,7 +248,9 @@ for ($n=0; $n<5; $n++) {
 	$circles .= "<span class='circle' id='circle$n' title='#{$theme['colors'][$n]}'></span> ";
 }
 
-$footer = (isset($theme) ? '<span style="float:left;">Theme based on <a href="' . $theme['url']. '">' . $theme['title'] . '</a></span>' : '') . ' ' . $circles . ' ' . (isset($timestamp) ? "<span style='float:right;'>$timestamp</span>" : '');
+$footer = "<span style='float:left;'>Theme based on <a href='{$theme['url']}'>{$theme['title']}</a>";
+$footer .= (isset($theme['userName'])) ? ' by ' . $theme['userName'] : '';
+$footer .= "</span> " . $circles . (isset($timestamp) ? " <span style='float:right;'>$timestamp</span>" : '');
 
 ?>
 <!DOCTYPE html>
