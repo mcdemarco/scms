@@ -7,10 +7,10 @@ $file_format = '.md'; // this is the extension on your markdown files (with the 
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
 $site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
-$random_theme = false; // fetch a random color palette for styling
+$random_theme = true; // fetch a random color palette for styling
 
 $index_filename = 'index'; // the default file to open in each directory
-$use_random = false; // open a random file (probably the first one) if the default file isn't found 
+$random_file = false; // open a random file (probably the first one) if the default file isn't found 
 $menu_style = 'flat'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
 
 /* Internal configuration */
@@ -79,8 +79,8 @@ if (is_dir($file)) {
     $content = file_get_contents($file);
   } else {
     $file_name = '';
-    //Pick a file from the directory based on $use_random.
-    if ($use_random) {
+    //Pick a file from the directory based on $random_file.
+    if ($random_file) {
       $dir = new DirectoryIterator($content_dir . $path);
       foreach ($dir as $fileinfo) {
 	if ($fileinfo->isFile() && '.' . $fileinfo->getExtension() == $file_format) {
@@ -202,9 +202,10 @@ if ($random_theme) {
 $theme['contrast'] = array_map('getContrastYIQ', $theme['colors']);
 //'f9f8f8-73628a-a7c0de-a0b2a6-313d5a';
 $style = <<<STYLE
-body {
-    color: rgb({$theme['contrast'][0]});
+body, .markdown-body {
+    color: rgba({$theme['contrast'][0]},0.9);
     background-color: #{$theme['colors'][0]};}
+.markdown-body a {color: rgba({$theme['contrast'][0]},0.9);}
 header, nav, nav li li, nav li a {
     color: rgb({$theme['contrast'][3]});
     background-color: #{$theme['colors'][3]};
@@ -223,8 +224,8 @@ footer, footer a {
 .markdown-body pre,
 .markdown-body kbd,
 .markdown-body a:hover {
+    color: rgb({$theme['contrast'][2]});
     background-color: #{$theme['colors'][2]};}
-.markdown-body a {color: rgba({$theme['contrast'][0]},0.9);}
 .markdown-body a:hover {color: rgba({$theme['contrast'][2]},0.7);}
 
 @media (min-width: 48em) {
