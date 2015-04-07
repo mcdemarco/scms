@@ -7,7 +7,7 @@ $file_format = '.md'; // this is the extension on your markdown files (with the 
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
 $site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
-$random_theme = true; // fetch a random color palette for styling
+$use_theme = 'random'; // style with the 'default' theme, a ColourLovers palette (e.g., '3706860'), or a 'random' one
 
 $index_filename = 'index'; // the default file to open in each directory
 $random_file = false; // open a random file (probably the first one) if the default file isn't found 
@@ -19,7 +19,7 @@ $marked_location = ($use_CDN ? '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/ma
 $bootstrap_location = $local_js_dir . 'bootstrap-without-jquery.js'; // v.0.6.1, Bootstrap 3.
 $bootswatch_location = ($use_CDN ? 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/'  :  $local_js_dir . 'bootswatch/') . $bootswatch_theme . '/bootstrap.min.css';
 
-//Ignore date errors.
+//Ignore annoying date warning.
 error_reporting(E_ALL ^ E_WARNING);
 
 /* Innards */
@@ -27,8 +27,8 @@ error_reporting(E_ALL ^ E_WARNING);
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
 $content_dir = $content_dir . '/';
 if ($menu_style != 'breadcrumbs' && $menu_style != 'flat' && $menu_style != 'filename') $menu_style = 'none';
-define('DEBUG', true);
-$default_colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871';//d7f9f1-7aa095-40531b-618b4a-afbc88';
+
+if ($use_theme != 'random' && !is_numeric($use_theme)) $use_theme = 'default';
 $paletteCount = rand(20,70);
 
 // Functions
@@ -53,6 +53,14 @@ function getBestIndex($paletteArray) {
 	}
 	return $paletteKey;
 }
+
+function setThemeFromColors($colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871') {
+	$theme['colors'] = explode("-", $colors);
+	$theme['url'] = 'http://app.coolors.co/'.$colors;
+	return $theme;
+}
+
+
 
 /* Processing */
 // Get the request and script urls.
@@ -187,7 +195,7 @@ if ($menu_style == 'none') {
 
 
 //Theme.
-if ($random_theme) {
+if ($use_theme == 'random') {
 	$colorURL = 'http://www.colourlovers.com/api/palettes/new?format=json&numResults=' . $paletteCount;
 	$curl = curl_init();
 	curl_setopt($curl,CURLOPT_URL,$colorURL);
@@ -197,10 +205,21 @@ if ($random_theme) {
 	curl_close($curl);
 	$json = json_decode(utf8_encode($raw),true);
 	$theme = $json[getBestIndex($json)];
+} elseif (is_numeric($use_theme)) {
+	$colorURL = 'http://www.colourlovers.com/api/palette/' . $use_theme . '?format=json';
+	$curl = curl_init();
+	curl_setopt($curl,CURLOPT_URL,$colorURL);
+	curl_setopt($curl,CURLOPT_HEADER,false);
+	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+	$raw = curl_exec($curl);
+	curl_close($curl);
+	$json = json_decode(utf8_encode($raw),true);
+	if (isset($json[0]))
+		$theme = $json[0];
+	else
+		$theme = setThemeFromColors();
 } else {
-	$theme['colors'] = explode("-", $default_colors);
-	$theme['title'] = 'Coolors output';
-	$theme['url'] = 'http://app.coolors.co/'.$default_colors;
+	$theme = setThemeFromColors();
 }
 
 $theme['contrast'] = array_map('getContrastYIQ', $theme['colors']);
@@ -232,25 +251,31 @@ footer, footer a, #circle4 {
     background-color: #{$theme['colors'][2]};}
 .markdown-body a:hover {color: rgba({$theme['contrast'][2]},0.7);}
 
+.circle, #circle3 {border: 2px solid rgba({$theme['contrast'][4]},0.3);}
+
 @media (min-width: 48em) {
     nav li li {
 	border:none;
     }
-
-.circle, #circle3 {border: 2px solid rgba({$theme['contrast'][4]},0.3);}
+}
 
 STYLE;
 
 //Footer.
 
-$circles = ' ';
+$footer = '';
 for ($n=0; $n<5; $n++) {
-	$circles .= "<span class='circle' id='circle$n' title='#{$theme['colors'][$n]}'></span> ";
+	$footer .= "<span class='circle' id='circle$n' title='#{$theme['colors'][$n]}'></span> ";
 }
 
-$footer = "<span style='float:left;'>Theme based on <a href='{$theme['url']}'>{$theme['title']}</a>";
-$footer .= (isset($theme['userName'])) ? ' by ' . $theme['userName'] : '';
-$footer .= "</span> " . $circles . (isset($timestamp) ? " <span style='float:right;'>$timestamp</span>" : '');
+if (isset($theme['title'])) 
+	$footer .= " <span class='theme-title'>Theme based on <a href='{$theme['url']}'>{$theme['title']}</a>" . (isset($theme['userName']) ? ' by ' . $theme['userName'] : '') . '.</span>';
+if (isset($timestamp))
+	$footer .= " <span class='last-modified'>$timestamp</span>";
+
+//Emit.
+
+header('content-type:text/html;charset=utf-8');
 
 ?>
 <!DOCTYPE html>
