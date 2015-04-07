@@ -25,6 +25,17 @@ footer {
     margin-top:20px;
 }
 
+footer .theme-title {
+    display:block;
+    padding: 10px;
+    float:none;
+}
+
+footer .last-modified {
+    display:block;
+    float:none;
+}
+
 #toc {
     border: 1px solid;
     border-radius: 5px;
@@ -113,7 +124,7 @@ main {
     margin: 0 0 20px 0;
 }
 
-/* 48em = 768px */
+/* 48em = 768px; these are the big screen settings */
 
 @media (min-width: 48em) {
     nav li {
@@ -136,6 +147,16 @@ main {
 	float:right;
 	margin: 0 0 0 20px;
     }
+
+    footer .theme-title {
+	padding:0;
+	float:left;
+    }
+
+    footer .last-modified {
+	float:right;
+    }
+
 }
 
 
