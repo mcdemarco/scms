@@ -236,6 +236,7 @@ header, nav, nav li li, nav li a, #circle3 {
 footer, footer a, #circle4 {
     color: rgba({$theme['contrast'][4]},0.7);
     background-color: #{$theme['colors'][4]};}
+footer {border-color: rgba({$theme['contrast'][4]},0.1);}
 #toc, #toc a, #circle1 {
     color: rgba({$theme['contrast'][1]},0.7);
     background-color: #{$theme['colors'][1]};}
