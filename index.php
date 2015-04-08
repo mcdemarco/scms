@@ -7,7 +7,7 @@ $file_format = '.md'; // this is the extension on your markdown files (with the 
 $use_CDN = true; // change this to false to serve javascript files locally (for speed or offline use)
 
 $site_name = 'SCMS'; // the site name appears in the menus, so shorter is better
-$use_theme = 'random'; // style with the 'default' theme, a ColourLovers palette (e.g., '3706860'), or a 'random' one
+$use_theme = 'random'; // style with the 'default' theme, a ColourLovers palette ('3706860') or pattern ('4733975'), or a 'random' one
 
 $index_filename = 'index'; // the default file to open in each directory
 $random_file = false; // open a random file (probably the first one) if the default file isn't found 
@@ -33,15 +33,6 @@ $paletteCount = rand(20,70);
 
 // Functions
 
-function getContrastYIQ($hexcolor){
-	//Get the contrast color using the YIQ formula.
-	$r = intval(substr($hexcolor,0,2),16);
-	$g = intval(substr($hexcolor,2,2),16);
-	$b = intval(substr($hexcolor,4,2),16);
-	$yiq = (($r*299)+($g*587)+($b*114))/1000;
-	return ($yiq >= 128) ? '0,0,0' : '255,255,255';
-}
-
 function getBestIndex($paletteArray) {
 	//Get the most liked of the (full) palettes.
 	$max = -1;
@@ -51,7 +42,27 @@ function getBestIndex($paletteArray) {
 			$paletteKey = $key;
 		}
 	}
-	return $paletteKey;
+	return (isset($paletteKey) ? $paletteKey : 0);
+}
+
+function getColourLovers($apiURL){
+	$curl = curl_init();
+	curl_setopt($curl,CURLOPT_URL,$apiURL);
+	curl_setopt($curl,CURLOPT_HEADER,false);
+	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+	$raw = curl_exec($curl);
+	curl_close($curl);
+	$json = json_decode(utf8_encode($raw),true);
+	return $json;
+}
+
+function getContrastYIQ($hexcolor){
+	//Get the contrast color using the YIQ formula.
+	$r = intval(substr($hexcolor,0,2),16);
+	$g = intval(substr($hexcolor,2,2),16);
+	$b = intval(substr($hexcolor,4,2),16);
+	$yiq = (($r*299)+($g*587)+($b*114))/1000;
+	return ($yiq >= 128) ? '0,0,0' : '255,255,255';
 }
 
 function setThemeFromColors($colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871') {
@@ -196,31 +207,25 @@ if ($menu_style == 'none') {
 
 //Theme.
 if ($use_theme == 'random') {
-	$colorURL = 'http://www.colourlovers.com/api/palettes/new?format=json&numResults=' . $paletteCount;
-	$curl = curl_init();
-	curl_setopt($curl,CURLOPT_URL,$colorURL);
-	curl_setopt($curl,CURLOPT_HEADER,false);
-	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
-	$raw = curl_exec($curl);
-	curl_close($curl);
-	$json = json_decode(utf8_encode($raw),true);
+	$colorURL = 'http://www.colourlovers.com/api/patterns/new?format=json&numResults=' . $paletteCount;
+	$json = getColourLovers($colorURL);
 	$theme = $json[getBestIndex($json)];
 } elseif (is_numeric($use_theme)) {
-	$colorURL = 'http://www.colourlovers.com/api/palette/' . $use_theme . '?format=json';
-	$curl = curl_init();
-	curl_setopt($curl,CURLOPT_URL,$colorURL);
-	curl_setopt($curl,CURLOPT_HEADER,false);
-	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
-	$raw = curl_exec($curl);
-	curl_close($curl);
-	$json = json_decode(utf8_encode($raw),true);
-	if (isset($json[0]))
+	$colorURL = 'http://www.colourlovers.com/api/pattern/' . $use_theme . '?format=json';
+	$json = getColourLovers($colorURL);
+	if (isset($json[0])) {
 		$theme = $json[0];
-	else
-		$theme = setThemeFromColors();
-} else {
-	$theme = setThemeFromColors();
+	} else {
+		$colorURL = 'http://www.colourlovers.com/api/palette/' . $use_theme . '?format=json';
+		$json = getColourLovers($colorURL);
+		if (isset($json[0])) 
+			$theme = $json[0];
+	}
 }
+
+if (!isset($theme) || sizeOf($theme['colors']) < 5)
+	$theme = setThemeFromColors();
+
 
 $theme['contrast'] = array_map('getContrastYIQ', $theme['colors']);
 
@@ -262,6 +267,11 @@ footer {border-color: rgba({$theme['contrast'][4]},0.1);}
 
 STYLE;
 
+if (isset($theme['imageUrl']))
+	$style .= "header div {background-image: url({$theme['imageUrl']});}";
+else
+	$style .= 'header div {display:none;}';
+
 //Footer.
 
 $footer = '';
@@ -291,8 +301,8 @@ header('content-type:text/html;charset=utf-8');
 	</style>
 </head>
 <body>
-
 	<header>
+		<div></div>
 		<nav>
 			<ul class="nav">
 				<li class="logo"><a href="/"><?php echo $site_name; ?></a></li>

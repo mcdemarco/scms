@@ -12,6 +12,9 @@ header, main, footer {
     margin: 0 auto;
     position:relative;
     max-width:100%;
+}
+
+header nav, main, footer {
     padding-left:.9375em;
     padding-right:.9375em;
 }
@@ -49,6 +52,7 @@ footer .last-modified {
 }
 
 #toctitle {
+    font-weight:bold;
     padding-top: 15px;
     margin-bottom: -10px;
     text-align:center;
@@ -271,4 +275,17 @@ span.circle {
     width: 16px;
     height: 16px;
     border-radius: 50%;
+}
+
+header div {
+    height:40px;
+    width:100%;
+    margin:0;
+    padding:0;
+    transition-duration: 1s;
+}
+
+header div:hover {
+    height:200px;
+    transition-duration: 1s;
 }
