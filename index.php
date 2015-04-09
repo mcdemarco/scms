@@ -30,6 +30,7 @@ if ($menu_style != 'breadcrumbs' && $menu_style != 'flat' && $menu_style != 'fil
 
 if ($use_theme != 'random' && !is_numeric($use_theme)) $use_theme = 'default';
 $paletteCount = rand(20,70);
+$paletteType = 'pattern';
 
 // Functions
 
@@ -78,7 +79,17 @@ function setThemeFromColors($colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871') {
 $url = '';
 $request_url = (isset($_SERVER['REQUEST_URI'])) ? strtok($_SERVER['REQUEST_URI'],'?') : '';
 $script_url  = (isset($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : '';
-$color_query = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '';
+
+if (isset($_SERVER['QUERY_STRING'])) {
+	parse_str($_SERVER['QUERY_STRING'], $color_query);
+	if (isset($color_query['pattern']) && is_numeric($color_query['pattern'])) {
+		$use_theme = $color_query['pattern'];
+	} elseif (isset($color_query['palette']) && is_numeric($color_query['palette'])) {
+		$use_theme = $color_query['palette'];
+		$paletteType = 'palette';
+	}
+}
+
 
 // Get the url path and trim the / of the left and the right
 if ($request_url != $script_url)
@@ -207,19 +218,14 @@ if ($menu_style == 'none') {
 
 //Theme.
 if ($use_theme == 'random') {
-	$colorURL = 'http://www.colourlovers.com/api/patterns/new?format=json&numResults=' . $paletteCount;
+	$colorURL = 'http://www.colourlovers.com/api/' . $paletteType . 's/new?format=json&numResults=' . $paletteCount;
 	$json = getColourLovers($colorURL);
 	$theme = $json[getBestIndex($json)];
 } elseif (is_numeric($use_theme)) {
-	$colorURL = 'http://www.colourlovers.com/api/pattern/' . $use_theme . '?format=json';
+	$colorURL = 'http://www.colourlovers.com/api/' . $paletteType . '/' . $use_theme . '?format=json';
 	$json = getColourLovers($colorURL);
 	if (isset($json[0])) {
 		$theme = $json[0];
-	} else {
-		$colorURL = 'http://www.colourlovers.com/api/palette/' . $use_theme . '?format=json';
-		$json = getColourLovers($colorURL);
-		if (isset($json[0])) 
-			$theme = $json[0];
 	}
 }
 
@@ -267,7 +273,7 @@ footer {border-color: rgba({$theme['contrast'][4]},0.1);}
 
 STYLE;
 
-if (isset($theme['imageUrl']))
+if (isset($theme['imageUrl']) && $paletteType == 'pattern')
 	$style .= "header div {background-image: url({$theme['imageUrl']});}";
 else
 	$style .= 'header div {display:none;}';
