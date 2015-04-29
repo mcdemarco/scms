@@ -6,11 +6,12 @@ SCMS is a simple, flat file CMS which serves Markdown files as HTML.  It uses a 
 
 To run SCMS, you need the `.htaccess` file, `index.php`, the contents of the `js/` directory, and an Apache webserver with PHP and mod_rewrite set up.  [Here](http://ole.michelsen.dk/blog/setup-local-web-server-apache-php-osx-yosemite.html) are some simple instructions for setting them up on a Mac.
 
-Once installed, you will be able to access files by name thus:  
-content/index.md can be accessed at /.  
-content/text.md can be accessed at /text.  
-content/subdirectory/index.md can be accessed at /subdirectory/.  
-A file at content/subdirectory/text.md can be accessed at /subdirectory/text.  
+Once installed, you will be able to access files by name thus:
+
+	content/index.md can be accessed at /.  
+	content/text.md can be accessed at /text.  
+	content/subdirectory/index.md can be accessed at /subdirectory/.  
+	content/subdirectory/text.md can be accessed at /subdirectory/text.  
 
 ## Configuration
 
