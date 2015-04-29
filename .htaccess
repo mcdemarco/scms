@@ -2,10 +2,10 @@
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}/content/%{REQUEST_URI} -f
-RewriteRule ^(.+)$ content/$1 [L]
+RewriteRule ^(.+)$ content/$1 [L,QSA]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d 
-RewriteRule . index.php [NC,L]
+RewriteRule . index.php [NC,L,QSA]
 </IfModule>
 
 # Prevent file browsing

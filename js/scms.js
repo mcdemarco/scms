@@ -15,6 +15,7 @@
 	
 	var newNode = document.createElement('div');
 	newNode.id = 'scms-markedUp';
+	newNode.className = 'markdown-body';
 	document.getElementById("content").appendChild(newNode);
 	
 	// Generate Markdown
@@ -36,12 +37,18 @@
 	var theH2s = document.body.querySelectorAll("h2");
 	for (h = 0; h < theH2s.length; h++) {
 		theH2s[h].setAttribute("id","scms-tocAnchor" + h);
-		panelString += "<a class='list-group-item' href='#scms-tocAnchor" + h + "'>" + theH2s[h].innerHTML + "</a></div>";
+		panelString += "<li><a href='#scms-tocAnchor" + h + "'>" + theH2s[h].innerHTML + "</a></li>";
 	}
 	
 	// Append.
 	if (panelString) {
 		panel.innerHTML = panelString;
+	} else {
+		document.getElementById("toc").style.display = 'none';
 	}
+
+	// Style.
+
+
 	
 })(window, document);
