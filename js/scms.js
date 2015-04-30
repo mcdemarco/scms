@@ -1,15 +1,29 @@
 /* Adapted from strapdown.js for scms. */
 
-(function(window, document) {
+var scms = {};
 
-	//Generate HTML from Markdown.
+(function(context) {
 
-	var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
+	context.markdown = (function () {
+		
+		return {
+			load: load,
+			process: process
+		};
 
-	if (!markdownEl) {
-		console.warn('No embedded Markdown found in this document.');
-		return;
-	}
+		function load() {
+			//The ajax loader will go here.
+		}
+		
+		function process() {
+			//Generate HTML from Markdown.
+
+			var markdownEl = document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
+
+			if (!markdownEl) {
+				console.warn('No embedded Markdown found in this document.');
+				return;
+			}
 
 	var markdown = markdownEl.textContent || markdownEl.innerText;
 	
@@ -31,7 +45,7 @@
 
 	//Generate TOC.
 
-	// Get the h2's.
+	//Get the h2's.
 	var panel = document.getElementById("scms-toc");
 	var panelString = '';
 	var theH2s = document.body.querySelectorAll("h2");
@@ -47,8 +61,12 @@
 		document.getElementById("toc").style.display = 'none';
 	}
 
-	// Style.
+			// Style.
 
-
+		}
+		
+	})();
 	
-})(window, document);
+})(scms);
+
+scms.markdown.process();
