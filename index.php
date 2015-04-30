@@ -179,7 +179,7 @@ if ($menu_style == 'none') {
 		if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
 			$displayName = explode($file_format, $fileinfo)[0];
 			$shortDisplayName = shortenForMenus($displayName);
-			$submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
+			$submenu .= '<li><a url="' . $fileinfo . '" href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
 			$submenu .= $shortDisplayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
 		}
 	}

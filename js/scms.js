@@ -7,12 +7,42 @@ var scms = {};
 	context.markdown = (function () {
 		
 		return {
-			load: load,
+			init: init,
+			fetch: fetch,
 			process: process
 		};
 
+		function fetch(url) {
+			//The ajax loader is used for page loads from links.
+			var xhr = new XMLHttpRequest();
+			xhr.onload = load;
+			xhr.open("GET", url, true);
+			xhr.send();
+		}
+
+		function init() {
+			//Initialize the menus and do the first process without a corresponding fetch.
+			link();
+			process();
+		}
+
+		function link() {
+			//private
+			var links = document.getElementsByTagName("nav")[0].getElementsByTagName("a");
+			for (var l=0; l<links.length; l++) {
+				var link = links[l];
+				link.onclick = function(e) {
+					scms.markdown.fetch(this.getAttribute("url"));
+					return false;
+				};
+				link.href = "#";
+			}
+		}
+
 		function load() {
-			//The ajax loader will go here.
+			//private
+			document.getElementsByTagName("xmp")[0].innerHTML = this.responseText;
+			process();
 		}
 		
 		function process() {
@@ -69,4 +99,4 @@ var scms = {};
 	
 })(scms);
 
-scms.markdown.process();
+scms.markdown.init();
