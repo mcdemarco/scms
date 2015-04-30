@@ -179,7 +179,8 @@ if ($menu_style == 'none') {
 		if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
 			$displayName = explode($file_format, $fileinfo)[0];
 			$shortDisplayName = shortenForMenus($displayName);
-			$submenu .= '<li><a url="' . $fileinfo . '" href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
+			$isMarkdown = ('.' . $fileinfo->getExtension() == $file_format) ? 'true' : 'false';
+			$submenu .= '<li><a url="' . $fileinfo . '" markdown="' . $isMarkdown . '" href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
 			$submenu .= $shortDisplayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
 		}
 	}

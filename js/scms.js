@@ -31,11 +31,13 @@ var scms = {};
 			var links = document.getElementsByTagName("nav")[0].getElementsByTagName("a");
 			for (var l=0; l<links.length; l++) {
 				var link = links[l];
-				link.onclick = function(e) {
-					scms.markdown.fetch(this.getAttribute("url"));
-					return false;
-				};
+				if (link.getAttribute("markdown") == 'true') {
+					link.onclick = function(e) {
+						scms.markdown.fetch(this.getAttribute("url"));
+						return false;
+					};
 				link.href = "#";
+				}
 			}
 		}
 
