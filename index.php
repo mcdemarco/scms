@@ -72,6 +72,15 @@ function setThemeFromColors($colors = 'f0f7ee-c4d7f2-afdedc-91a8a4-776871') {
 	return $theme;
 }
 
+function shortenForMenus($possiblyLongName) {
+	$plLen = strlen($possiblyLongName);
+	if ($plLen > 12) {
+		return substr($possiblyLongName,0,8) . "..." . substr($possiblyLongName,$plLen-3,3);
+	} else {
+		return $possiblyLongName;
+	}
+}
+
 
 
 /* Processing */
@@ -169,8 +178,9 @@ if ($menu_style == 'none') {
 	foreach ($dir as $fileinfo) {
 		if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
 			$displayName = explode($file_format, $fileinfo)[0];
-			$submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
-			$submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
+			$shortDisplayName = shortenForMenus($displayName);
+			$submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
+			$submenu .= $shortDisplayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
 		}
 	}
 	
