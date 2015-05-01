@@ -17,7 +17,7 @@ var scms = {};
 			xhr.onload = load;
 			xhr.open("GET", url, true);
 			xhr.send();
-			history.pushState(null, null, url.substring(0, url.lastIndexOf(".")));
+			history.pushState(null, null, url.substring(0, url.lastIndexOf(".")) + location.search);
 		}
 
 		function generateTOC() {
@@ -57,6 +57,8 @@ var scms = {};
 						return false;
 					};
 				link.href = "#";
+				} else {
+					link.href += location.search;
 				}
 			}
 		}
