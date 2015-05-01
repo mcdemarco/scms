@@ -180,7 +180,7 @@ if ($menu_style == 'none') {
 			$displayName = explode($file_format, $fileinfo)[0];
 			$shortDisplayName = shortenForMenus($displayName);
 			$isMarkdown = ('.' . $fileinfo->getExtension() == $file_format) ? 'true' : 'false';
-			$submenu .= '<li><a url="' . ($path != '' ? $path . '/' : '') . $fileinfo . '" markdown="' . $isMarkdown . '" href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
+			$submenu .= '<li><a url="/' . ($path != '' ? $path . '/' : '') . $fileinfo . '" markdown="' . $isMarkdown . '" href="/' . ($path != '' ? $path . '/' : '') . $displayName . '" title="' . $displayName . '">';
 			$submenu .= $shortDisplayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
 		}
 	}
