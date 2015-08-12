@@ -73,6 +73,9 @@ The 'breadcrumbs' option provides a breadcrumb trail from the top level of your 
 
 The 'flat' option flattens the current directory into separate menu items, plus an 'up' menu item to go up one directory level.  This option is the most likely to go wrong if your directory or subdirectories contain too many files to fit into the menu.
 
+### To Do
+
+SCMS sometimes fetches markdown files with Ajax and sometimes has to reload the PHP.  Ideally it should fetch the entire directory structure on the first load and use Ajax for all subsequent loading.  I got distracted from this phase of the project when I found [markdown-handler](https://github.com/mcdemarco/markdown-handler), an Apache-side way of handling markdown files, which combined with [h5ai](https://larsjung.de/h5ai/) equals most of what I wanted for SCMS.
 
 ## Credits
 
