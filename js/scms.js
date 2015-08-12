@@ -102,8 +102,15 @@ var scms = {};
 
 		function relink() {
 			//Find any local links in the processed markdown and hijack them for ajax.
-
-			//...but how?
+			var anchors = document.getElementById('scms-markedUp').getElementsByTagName("a");
+			for (var a=0;a < anchors.length; a++) {
+				if (anchors[a].host == window.location.host) {
+					anchors[a].addEventListener('click', function(event) {
+						event.preventDefault();
+						scms.markdown.fetch(this.pathname);
+					});
+				}
+			}
 		}
 		
 		function style() {
