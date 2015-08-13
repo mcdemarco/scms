@@ -75,7 +75,7 @@ The 'flat' option flattens the current directory into separate menu items, plus 
 
 ### To Do
 
-SCMS sometimes fetches markdown files with Ajax and sometimes has to reload the PHP.  Ideally it should fetch the entire directory structure on the first load and use Ajax for all subsequent loading.  I got distracted from this phase of the project when I found [markdown-handler](https://github.com/mcdemarco/markdown-handler), an Apache-side way of handling markdown files, which combined with [h5ai](https://larsjung.de/h5ai/) equals most of what I wanted for SCMS.
+SCMS sometimes fetches markdown files with Ajax and sometimes has to reload the PHP.  Ideally it should fetch the entire directory structure on the first load and use Ajax for all subsequent loading.  I got distracted from this phase of the project when I found [markdown-handler](https://github.com/mcdemarco/markdown-handler), an Apache-side way of handling markdown files, and then [h5ai](https://larsjung.de/h5ai/), which all by itself equals most of what I wanted for SCMS.
 
 ## Credits
 
