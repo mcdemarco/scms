@@ -14,8 +14,10 @@ $index_filename = 'index'; // the default file to open in each directory
 $use_random = false; // open a random file (probably the first one) if the default file isn't found 
 $menu_style = 'breadcrumbs'; // Options are 'breadcrumbs', 'flat', 'filename', and 'none'.
 
+$sub_dir = 'scms/'; //the subdirectory in which you installed SCMS; use '' for a root installation.
+
 /* Internal configuration */
-$local_js_dir = '/js/lib/';
+$local_js_dir = '/' . $sub_dir . 'js/lib/';
 $marked_location = ($use_CDN ? '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.js' :  $local_js_dir . 'marked.js');
 $bootstrap_location = $local_js_dir . 'bootstrap-without-jquery.js'; // v.0.6.1, Bootstrap 3.
 $bootswatch_location = ($use_CDN ? 'https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/'  :  $local_js_dir . 'bootswatch/') . $bootswatch_theme . '/bootstrap.min.css';
@@ -108,7 +110,7 @@ if ($menu_style == 'none') {
   foreach ($dir as $fileinfo) {
     if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
       $displayName = explode($file_format, $fileinfo)[0];
-      $submenu .= '<li><a href="/' . ($path != '' ? $path . '/' : '') . $displayName . '">';
+      $submenu .= '<li><a href="/' . $sub_dir . ($path != '' ? $path . '/' : '') . $displayName . '">';
       $submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
     }
   }
@@ -131,7 +133,7 @@ if ($menu_style == 'none') {
 	  $menu .= '<ul class="dropdown-menu" role="menu">' . $submenu . '</ul></li>';
 	} else {
 	  //Dummy home link
-	  $menu .= '<li><a href="/">home</a></li><li><a class="scms-marker">&gt;</a></li>';
+	  $menu .= '<li><a href="/' . $sub_dir . '">home</a></li><li><a class="scms-marker">&gt;</a></li>';
 	}
       } else {
 	$menu .= '<li><a class="scms-marker">&gt;</a></li>';
@@ -163,7 +165,7 @@ if ($menu_style == 'none') {
   <title><?php echo ($url != '' ? $url : $site_name); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="<?php echo $bootswatch_location; ?>"/>
-  <link rel="stylesheet" href="/js/scms.css"/>
+  <link rel="stylesheet" href="<?php echo $local_js_dir; ?>../scms.css"/>
 </head>
 <body>
     <header class="navbar <?php if ($invert_nav) echo 'navbar-inverse'; ?>" role="navigation">
@@ -175,7 +177,7 @@ if ($menu_style == 'none') {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><?php echo $site_name; ?></a>
+          <a class="navbar-brand" href="/<?php echo $sub_dir; ?>"><?php echo $site_name; ?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -193,6 +195,6 @@ if ($menu_style == 'none') {
   </div>
   <script src="<?php echo $bootstrap_location; ?>"></script>
   <script src="<?php echo $marked_location; ?>"></script>
-  <script src="/js/scms.js"></script>
+  <script src="<?php echo $local_js_dir; ?>../scms.js"></script>
 </body>
 </html>
