@@ -108,7 +108,7 @@ if ($menu_style == 'none') {
   $submenu = '';
 
   foreach ($dir as $fileinfo) {
-    if (!$fileinfo->isDot()) {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
+    if (!$fileinfo->isDot() && $fileinfo->getBasename() !== '.DS_Store') {// && ($fileinfo->getExtension() == '' || '.' . $fileinfo->getExtension() == $file_format)) {
       $displayName = explode($file_format, $fileinfo)[0];
       $submenu .= '<li><a href="/' . $sub_dir . ($path != '' ? $path . '/' : '') . $displayName . '">';
       $submenu .= $displayName . ($fileinfo->isDir() ? '/' : '') . '</a></li>';
