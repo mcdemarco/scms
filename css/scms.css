@@ -1,0 +1,292 @@
+/* Responsive style adapted from asciidoctor-default */
+
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic";
+
+/* layout */
+
+body {
+    margin:0;
+}
+
+header, main, footer {
+    margin: 0 auto;
+    position:relative;
+    max-width:100%;
+}
+
+header nav, main, footer {
+    padding-left:.9375em;
+    padding-right:.9375em;
+}
+
+header nav, main, footer div, #toc {
+    margin:auto;
+    max-width:62.5em;
+}
+
+footer {
+    line-height:1.44;
+    margin-top:20px;
+    border-top: 1px solid;
+}
+
+footer div {
+    text-align:center;
+    padding:1.25em 0 1em 0;
+}
+
+footer .theme-title {
+    display:block;
+    padding: 10px;
+    float:none;
+}
+
+footer .last-modified {
+    display:block;
+    float:none;
+}
+
+#toc {
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+#toctitle {
+    font-weight:bold;
+    padding-top: 15px;
+    margin-bottom: -10px;
+    text-align:center;
+}
+
+#toc a {
+    text-decoration:none;
+}
+
+/* Navigation adapted from: http://kmturley.blogspot.com/2014/06/responsive-mobile-dropdown-navigation.html */
+
+header {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom:1px solid;
+    margin-bottom:20px;
+}
+
+nav {
+    overflow: hidden;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+}
+
+nav .btn .menu {
+    display: none;
+}
+
+nav .btn:hover .menu {
+    display: block;
+}
+
+nav li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+nav li a:hover {
+    border-left: 1px solid;
+    border-right: 1px solid;
+    opacity: 0.3;
+}
+
+nav .logo {
+    float: left;
+    border:none;
+}
+
+nav li li {
+    border-top:1px solid;
+}
+
+nav .btn-link {
+    float: right;
+    padding: 10px;
+}
+
+nav .menu {
+    clear: both;
+}
+
+main {
+    overflow:hidden;
+}
+
+#toc {
+    float:none;
+    margin: 0 .9375em 20px .9375em;
+}
+
+/* 48em = 768px; these are the big screen settings */
+
+@media (min-width: 48em) {
+    nav li {
+        float: left;
+    }
+    nav li li {
+	border:none;
+    }
+    nav li a {
+        padding: 10px;
+    }
+    nav .btn .menu {
+        display: block;
+    }
+    nav .btn-link {
+        display: none;
+    }
+
+    #toc {
+	float:right;
+	margin: 0 auto 0 .9375em;
+    }
+
+    footer .theme-title {
+	padding:0;
+	float:left;
+    }
+
+    footer .last-modified {
+	float:right;
+    }
+
+}
+
+
+/* flex for short pages */
+
+body {
+    display: -webkit-flex;
+    display: flex;
+    min-height: 100vh;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+    -webkit-flex: 1 0 auto;
+}
+
+/* undo some github style */
+
+body, .markdown-body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+}
+
+.markdown-body h1, .markdown-body h2 {
+    border: 0;
+}
+
+/* recolor: f9f8f8-73628a-a7c0de-a0b2a6-313d5a */
+
+body {
+    color: #000;
+    background-color: #f9f8f8;
+}
+
+header, nav, nav li a {
+    color: #000;
+    background-color: #a0b2a6;
+}
+
+nav li a {
+    opacity: 0.45;
+}
+
+footer, footer a {
+    color: rgba(255,255,255,0.7);
+    background-color: #313D5A;
+}
+
+footer {
+    border-color: rgba(255,255,255,0.1);
+}
+
+#toc, #toc a {
+    color: rgba(255,255,255,0.7);
+    background-color: #73628a;
+}
+
+.markdown-body hr,
+.markdown-body code,
+.markdown-body table tr,
+.markdown-body table tr:nth-child(2n),
+.markdown-body .highlight pre,
+.markdown-body pre,
+.markdown-body kbd,
+.markdown-body a:hover {
+    background-color: #a7c0de;
+}
+
+.markdown-body a,
+.markdown-body a:hover {
+    color: rgba(0,0,0,0.9);
+    font-weight: bold;
+}
+
+.markdown-body a:hover {
+    color: rgba(0,0,0,0.7);
+}
+
+/* hN header opacity */
+
+.markdown-body h1 {
+    opacity: 0.4;
+}
+
+.markdown-body h2, #toctitle {
+    opacity: 0.5;
+}
+
+.markdown-body h3 {
+    opacity: 0.6;
+}
+
+.markdown-body h4 {
+    opacity: 0.7;
+}
+
+.markdown-body h5 {
+    opacity: 0.8;
+}
+
+.markdown-body h6 {
+    opacity: 0.9;
+}
+
+/* other */
+
+span.circle {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+header div {
+    background-position: center;
+    height:40px;
+    width:100%;
+    margin:0;
+    padding:0;
+    transition-duration: 1s;
+}
+
+header div:hover {
+    height:200px;
+    transition-duration: 1s;
+}
